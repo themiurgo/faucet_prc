@@ -1,5 +1,6 @@
 from restful_lib import Connection
 import re
+import feedparser
 
 class Account(object):
     """A vcast account"""
@@ -19,4 +20,9 @@ class Account(object):
         """Return the RSS feed of avaible recordings"""
         feed = self.connection.request_get('/feed')['body']
         feed = re.sub(r'\\(.)', r'\1', feed)[13:-3]
-        return feed
+        return feedparser.parse(feed)
+
+class Preferences(object):
+    pass
+
+a = Account('username','pw')
