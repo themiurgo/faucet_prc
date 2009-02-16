@@ -3,11 +3,19 @@ import sys
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
 import PopMenuCompleted
 
+STRING_WAITING='Disponibile'
+STRING_AVAILABLE='In Attesa'
+STRING_DOWNLOADED='Scaricato'
+
 # Dizionario pre-caricato per le prove
 recordings = {
-1 : ('Disponibile', 'AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
-2 : ('In Attesa', 'Hit List','RadioDJ', '13/02/2009','15:00','01:15','mp3','Radio'),
-3 : ('Scaricato', 'Hit List','Virgin Radio', '13/02/2009','14:00','01:00','mp3','Radio')
+0 : (STRING_DOWNLOADED, '1AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
+1 : (STRING_WAITING, '2Hit List','RadioDJ', '13/02/2009','15:00','01:15','mp3','Radio'),
+2 : (STRING_DOWNLOADED, '3Hit List','Virgin Radio', '13/02/2009','14:00','01:00','mp3','Radio'),
+3 : (STRING_DOWNLOADED, '4AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
+4 : (STRING_WAITING, '5AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
+5 : (STRING_AVAILABLE, '6AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
+6 : (STRING_DOWNLOADED, '7AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV')
 }
 
 
@@ -105,10 +113,26 @@ class CompletedPanel(wx.Panel):
         for i in range(num):
             self.list.CheckItem(i, False)
 
-    def OnApply(self, event):
+    def OnRemoveCompleted(self, event):
         num = self.list.GetItemCount()
+        count=0
         for i in range(num):
-            if i == 0: self.log.Clear()
-            if self.list.IsChecked(i):
-                self.log.AppendText(self.list.GetItemText(i) + '\n')
+            # Ottieni il testo di una colonna arbitraria
+            #item = self.list.GetItem(i,4).GetText()
+            itemStatus = self.list.GetItemText(i-count)
+            print i
+            print itemStatus
+            print count
+            print " "
+            if itemStatus == STRING_DOWNLOADED:
+                #print recordings[i]
+              
+                self.list.DeleteItem(i-count)
+                count+=1; 
+                #del recordings[i]
+                
+                
+            #print item
+            #if self.list.IsChecked(i):
+                #self.log.AppendText(self.list.GetItemText(i) + '\n')
 

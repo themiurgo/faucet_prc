@@ -5,8 +5,8 @@ from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin,ColumnSorterMixin
 
 # Dizionario pre-caricato per le prove
 recordings = {
-1 : ('Presa Diretta', 'Rai3', '15/02/2009','21:20','02:15','DivX','TV'),
-2 : ('Viva Radio 2', 'Radio2', '16/02/2009','13:30','00:30','iPod','Radio')
+0 : ('Presa Diretta', 'Rai3', '15/02/2009','21:20','02:15','DivX','TV'),
+1 : ('Viva Radio 2', 'Radio2', '16/02/2009','13:30','00:30','iPod','Radio')
 }
 
 

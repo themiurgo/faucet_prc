@@ -25,11 +25,11 @@ class PopMenuCompleted(wx.Menu):
         self.panel=panel
         self.frame=frame
 
-        item1 = wx.MenuItem(self, wx.NewId(), "Aggiungi...")
+        item1 = wx.MenuItem(self, wx.NewId(), "Rimuovi Completati")
         self.AppendItem(item1)
         #Per qualche motivo strano, se mettessi la chiamata 'OnAdd' nella
         #apposita funzione OnItem1, non funziona
-        self.Bind(wx.EVT_MENU,  self.panel.OnAdd , item1)
+        self.Bind(wx.EVT_MENU,  self.parent.OnRemoveCompleted , item1)
         
         item2 = wx.MenuItem(self, wx.NewId(),"Minimizza")
         self.AppendItem(item2)
