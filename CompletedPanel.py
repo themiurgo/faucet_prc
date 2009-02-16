@@ -12,7 +12,7 @@ recordings = {
 0 : (STRING_DOWNLOADED, '1AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
 1 : (STRING_WAITING, '2Hit List','RadioDJ', '13/02/2009','15:00','01:15','mp3','Radio'),
 2 : (STRING_DOWNLOADED, '3Hit List','Virgin Radio', '13/02/2009','14:00','01:00','mp3','Radio'),
-3 : (STRING_DOWNLOADED, '4AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
+3 : (STRING_WAITING, '4AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
 4 : (STRING_WAITING, '5AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
 5 : (STRING_AVAILABLE, '6AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
 6 : (STRING_DOWNLOADED, '7AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV')
@@ -120,16 +120,15 @@ class CompletedPanel(wx.Panel):
             # Ottieni il testo di una colonna arbitraria
             #item = self.list.GetItem(i,4).GetText()
             itemStatus = self.list.GetItemText(i-count)
-            print i
-            print itemStatus
-            print count
-            print " "
+            # Obtain the key
+            itemData = self.list.GetItemData(i-count)
             if itemStatus == STRING_DOWNLOADED:
                 #print recordings[i]
               
                 self.list.DeleteItem(i-count)
                 count+=1; 
-                #del recordings[i]
+                del recordings[itemData]
+        print len(recordings)
                 
                 
             #print item
