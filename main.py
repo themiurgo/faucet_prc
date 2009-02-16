@@ -297,7 +297,7 @@ class MainPanel(wx.Panel):
         self.recPanel = RecorderPanel.RecorderPanel(splitter, -1, self,self.parent)
         
         # Aggiungi (in basso) il pannello delle Registrazioni completate      
-        self.comPanel = CompletedPanel.CompletedPanel(splitter, -1)
+        self.comPanel = CompletedPanel.CompletedPanel(splitter, -1,self,self.parent)
         
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         

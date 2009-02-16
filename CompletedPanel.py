@@ -1,6 +1,7 @@
 import wx
 import sys
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
+import PopMenuCompleted
 
 # Dizionario pre-caricato per le prove
 recordings = {
@@ -31,8 +32,11 @@ class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
 
 #Pannello (in basso) delle registrazioni completate
 class CompletedPanel(wx.Panel):
-    def __init__(self, parent, id):
+    def __init__(self, parent, id,panel,frame):
         wx.Panel.__init__(self, parent, -1)
+        
+        self.panel=panel
+        self.frame=frame
         
         # Sizer, ovvero gestore del layout del pannello
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -70,6 +74,13 @@ class CompletedPanel(wx.Panel):
         self.SetBackgroundColour(wx.LIGHT_GREY)
         self.list.SetBackgroundColour(wx.LIGHT_GREY)
         #vbox.Add((-1, 10))
+        
+        self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+        
+        
+     #Crea il menu' pop-up alla pressione del tasto destro
+    def OnRightDown(self,event):
+        self.PopupMenu(PopMenuCompleted.PopMenuCompleted(self,self.panel,self.frame), event.GetPosition())
         
     def InsertValue(self,key,data):
         index = self.list.InsertStringItem(sys.maxint, data[0])
