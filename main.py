@@ -5,6 +5,7 @@ import time
 import RecorderDialog   # Finestra per l'inserimento di una nuova Registrazione
 import RecorderPanel    # Pannello delle registrazioni in corso o puntate
 import CompletedPanel   # Pannello delle registrazioni completate
+from taskbar import WxCastTaskBarIcon
 
 # Codici utili per la gestione eventi
 ID_ABOUT = 101
@@ -20,6 +21,8 @@ wx.HelpProvider.Set(provider)
 
 #---------------------------------------------------------------------------
 
+def OnTaskBarRight(event):
+    self.ExitMainLoop()
 
 
 # Fa visualizzare una schermata iniziale di caricamento
@@ -76,7 +79,6 @@ class MainMenuBar(wx.MenuBar):
                 "&Canali\tCTRL+H",
                 "Imposta le preferenze sui canali")
 
-        frame.Bind(wx.EVT_MENU, frame.closeWin, id=ID_EXIT)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=ID_ACCOUNT)
 
 
@@ -220,19 +222,29 @@ class wxCastFrame(wx.Frame):
           
         menubar = MainMenuBar(self)
         self.SetMenuBar(menubar)
-    
         
         #Aggiungi l'icona
         iconPath ="./img/fau_icon.ico"
         icon = wx.Icon(iconPath, wx.BITMAP_TYPE_ICO)
         self.SetIcon(icon)
+
+#        self.tbicon = WxCastTaskBarIcon(self)
+#        self.tbicon.SetIconTimer()
+
+#        wx.EVT_TASKBAR_RIGHT_UP(tbicon, OnTaskBarRight)
         
+        self.Bind(wx.EVT_MENU, self.onMenuExit, id=ID_EXIT)
+        self.Bind(wx.EVT_CLOSE, self.onCloseWindow)
+
         #Centra e mostra il Frame
         self.Centre()
         self.Show(True)
 
+    def onMenuExit(self,event):
+        self.Close(True)
+
     # Chiudi la finestra + Finestra di conferma
-    def closeWin(self,e):
+    def onCloseWindow(self,e):
         confirmDialog = wx.MessageDialog(None, 'Sei sicuro di voler uscire?', 'Abbandona wxCast', wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
         
         # Finestra di conferma
@@ -243,8 +255,6 @@ class wxCastFrame(wx.Frame):
         confirmDialog.Destroy()
     
     def Settings(self, event):
-
-            
         dlg = SettingsDialog(self, -1, "Account", size=(500, 200),
                          #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
                          style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX          
@@ -253,19 +263,14 @@ class wxCastFrame(wx.Frame):
 
         # this does not return until the dialog is closed.
         val = dlg.ShowModal()
+#        dlg.Show()
     
         #if val == wx.ID_OK:
             
         #else:
-            
-
         dlg.Destroy()
-        
 
-
-#---------------------------------------------------------------------------    
-
-
+#---------------------------------------------------------------------------
 
 
 # Pannello principale del Frame        
@@ -345,4 +350,3 @@ if __name__ == '__main__':
         #        style=wx.DEFAULT_FRAME_STYLE)
     wxCastFrame(None, -1, 'wxCast')
     app.MainLoop()
-
