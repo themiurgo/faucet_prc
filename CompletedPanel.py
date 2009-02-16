@@ -5,7 +5,8 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
 # Dizionario pre-caricato per le prove
 recordings = {
 1 : ('Disponibile', 'AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
-2 : ('In Attesa', 'Hit List','RadioDJ', '13/02/2009','15:00','01:15','mp3','Radio')
+2 : ('In Attesa', 'Hit List','RadioDJ', '13/02/2009','15:00','01:15','mp3','Radio'),
+3 : ('Scaricato', 'Hit List','Virgin Radio', '13/02/2009','14:00','01:00','mp3','Radio')
 }
 
 

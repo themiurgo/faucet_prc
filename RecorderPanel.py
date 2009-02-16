@@ -1,6 +1,6 @@
 import wx
 import sys
-import PopMenu  # Classe che consente la visualizzazione di un menu' pop-up
+import PopMenuRecorder  # Classe che consente la visualizzazione di un menu' pop-up
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin,ColumnSorterMixin
 
 # Dizionario pre-caricato per le prove
@@ -78,7 +78,7 @@ class RecorderPanel(wx.Panel):
         
      #Crea il menu' pop-up alla pressione del tasto destro
     def OnRightDown(self,event):
-        self.PopupMenu(PopMenu.PopMenu(self,self.panel,self.frame), event.GetPosition())
+        self.PopupMenu(PopMenuRecorder.PopMenuRecorder(self,self.panel,self.frame), event.GetPosition())
     
     # Inserisci un nuovo valore nella lista   
     def InsertValue(self,key,data):

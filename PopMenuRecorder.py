@@ -17,7 +17,7 @@ import wx
 # In altre parole, la Lista fa aprire il menu' e il menu' decide che azione fare
 # in base a cio' che si e' cliccato.
 # 
-class PopMenu(wx.Menu):
+class PopMenuRecorder(wx.Menu):
     def __init__(self,parent,panel,frame):
         wx.Menu.__init__(self)
         
@@ -38,7 +38,7 @@ class PopMenu(wx.Menu):
         # Idem come sopra
         item3 = wx.MenuItem(self, wx.NewId(),"Chiudi")
         self.AppendItem(item3)
-        self.Bind(wx.EVT_MENU, self.frame.closeWin, item3)
+        self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, item3)
 
     #def OnItem1(self, event):
        # self.parent.OnAdd 

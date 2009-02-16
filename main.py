@@ -5,7 +5,7 @@ import time
 import RecorderDialog   # Finestra per l'inserimento di una nuova Registrazione
 import RecorderPanel    # Pannello delle registrazioni in corso o puntate
 import CompletedPanel   # Pannello delle registrazioni completate
-from taskbar import WxCastTaskBarIcon
+#from taskbar import WxCastTaskBarIcon
 
 # Codici utili per la gestione eventi
 ID_ABOUT = 101
