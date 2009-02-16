@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import wx
 import time
 import RecorderDialog   # Finestra per l'inserimento di una nuova Registrazione
@@ -220,10 +222,10 @@ class wxCastFrame(wx.Frame):
         self.SetMenuBar(menubar)
     
         
-        #Aggiungi l'icona (DA ELIMINARE IL PATH ASSOLUTO)
-        #iconPath ="/home/daniele/Python/prove/Img/fau_icon.ico"
-        #icon = wx.Icon(iconPath, wx.BITMAP_TYPE_ICO)
-        #self.SetIcon(icon)
+        #Aggiungi l'icona
+        iconPath ="./img/fau_icon.ico"
+        icon = wx.Icon(iconPath, wx.BITMAP_TYPE_ICO)
+        self.SetIcon(icon)
         
         #Centra e mostra il Frame
         self.Centre()
