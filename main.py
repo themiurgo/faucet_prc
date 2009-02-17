@@ -2,10 +2,9 @@
 
 import wx
 import time
-import RecorderDialog   # Finestra per l'inserimento di una nuova Registrazione
-import RecorderPanel    # Pannello delle registrazioni in corso o puntate
-import CompletedPanel   # Pannello delle registrazioni completate
-#from taskbar import WxCastTaskBarIcon
+from Dialogs import *   # Finestra per l'inserimento di una nuova Registrazione
+from Panels import *
+# from taskbar import WxCastTaskBarIcon
 
 # Codici utili per la gestione eventi
 ID_ABOUT = 101
@@ -13,11 +12,16 @@ ID_EXIT = 110
 ID_ACCOUNT = 120
 ID_CHANNELS = 121
 
+TBFLAGS = ( wx.TB_HORIZONTAL
+            | wx.NO_BORDER
+            | wx.TB_FLAT
+            #| wx.TB_TEXT
+            #| wx.TB_HORZ_LAYOUT
+            )
+
 # Questo oggetto consente la presenza di un help nelle varie finestre
 provider = wx.SimpleHelpProvider()
 wx.HelpProvider.Set(provider)
-
-
 
 #---------------------------------------------------------------------------
 
@@ -45,12 +49,7 @@ def LoadingBar():
             (keepGoing, skip) = loadingDlg.Update(time)
     loadingDlg.Destroy()     
 
-
-
 #---------------------------------------------------------------------------
-
-
-
 
 class MainMenuBar(wx.MenuBar):
     def __init__(self, frame):
@@ -142,76 +141,14 @@ class MainStatusBar(wx.StatusBar):
 
 
 
-class SettingsDialog(wx.Dialog):
-    def __init__(
-            self, parent, ID, title, size=wx.DefaultSize, pos=wx.DefaultPosition, 
-            style=wx.DEFAULT_DIALOG_STYLE):
-        wx.Dialog.__init__(self, parent, -1)
-        
-        sizer = wx.BoxSizer(wx.VERTICAL)
-
-        label = wx.StaticText(self, -1, "Impostazioni dell'account")
-        label.SetHelpText("This is the help text for the label")
-        sizer.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        box = wx.BoxSizer(wx.HORIZONTAL)
-
-        label = wx.StaticText(self, -1, "Username")
-        label.SetHelpText("This is the help text for the label")
-        box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        text = wx.TextCtrl(self, -1, "", size=(80,-1))
-        text.SetHelpText("Here's some help text for field #1")
-        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
-        box = wx.BoxSizer(wx.HORIZONTAL)
-
-        label = wx.StaticText(self, -1, "Password")
-        label.SetHelpText("This is the help text for the label")
-        box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        text = wx.TextCtrl(self, -1, "", size=(80,-1),style=wx.TE_PASSWORD)
-        text.SetHelpText("Here's some help text for field #2")
-        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
-        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
-
-        btnsizer = wx.StdDialogButtonSizer()
-        
-        if wx.Platform != "__WXMSW__":
-            btn = wx.ContextHelpButton(self)
-            btnsizer.AddButton(btn)
-        
-        btn = wx.Button(self, wx.ID_OK)
-        btn.SetHelpText("Salva i cambiamenti")
-        btn.SetDefault()
-        btnsizer.AddButton(btn)
-
-        btn = wx.Button(self, wx.ID_CANCEL)
-        btn.SetHelpText("Annulla i cambiamenti")
-        btnsizer.AddButton(btn)
-        btnsizer.Realize()
-
-        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-
-
 #---------------------------------------------------------------------------
-
-
  
 # Finestra Principale del Programma
 class wxCastFrame(wx.Frame):
     def __init__(self, parent, id, title):
         wx.Frame.__init__(self, parent, id, title, size=(800, 600))
+
+#        self.DrawToolbar()
         
         #Aggiungi il pannello che contiene bottoni e schede
         self.panel = MainPanel(self,id)
@@ -240,6 +177,61 @@ class wxCastFrame(wx.Frame):
         self.Centre()
         self.Show(True)
 
+    def DrawToolbar(self):
+        tb = self.CreateToolBar(TBFLAGS)
+        tsize = (24,24)
+        new_bmp = wx.ArtProvider.GetBitmap(wx.ART_NEW, wx.ART_TOOLBAR, tsize)
+        open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize)
+        copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR, tsize)
+        paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR, tsize)
+
+        tb.SetToolBitmapSize(tsize)
+        
+        #tb.AddSimpleTool(10, new_bmp, "New", "Long help for 'New'")
+        tb.AddLabelTool(10, "New", new_bmp, shortHelp="New", longHelp="Long help for 'New'")
+        self.Bind(wx.EVT_TOOL, self.OnToolClick, id=10)
+        self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=10)
+
+        #tb.AddSimpleTool(20, open_bmp, "Open", "Long help for 'Open'")
+        tb.AddLabelTool(20, "Open", open_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
+        self.Bind(wx.EVT_TOOL, self.OnToolClick, id=20)
+        self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=20)
+
+        tb.AddSeparator()
+        tb.AddSimpleTool(30, copy_bmp, "Copy", "Long help for 'Copy'")
+        self.Bind(wx.EVT_TOOL, self.OnToolClick, id=30)
+        self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=30)
+
+        tb.AddSimpleTool(40, paste_bmp, "Paste", "Long help for 'Paste'")
+        self.Bind(wx.EVT_TOOL, self.OnToolClick, id=40)
+        self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=40)
+
+        tb.AddSeparator()
+
+        # Final thing to do for a toolbar is call the Realize() method. This
+        # causes it to render (more or less, that is).
+        tb.Realize()
+
+    def DoSearch(self,  text):
+        # called by TestSearchCtrl
+        self.log.WriteText("DoSearch: %s\n" % text)
+        # return true to tell the search ctrl to remember the text
+        return True
+    
+
+    def OnToolClick(self, event):
+        self.log.WriteText("tool %s clicked\n" % event.GetId())
+        #tb = self.GetToolBar()
+        tb = event.GetEventObject()
+        tb.EnableTool(10, not tb.GetToolEnabled(10))
+
+    def OnToolRClick(self, event):
+        self.log.WriteText("tool %s right-clicked\n" % event.GetId())
+
+    def OnCombo(self, event):
+        self.log.WriteText("combobox item selected: %s\n" % event.GetString())
+
+
     def onMenuExit(self,event):
         self.Close(True)
 
@@ -262,16 +254,18 @@ class wxCastFrame(wx.Frame):
         dlg.CenterOnScreen()
 
         # this does not return until the dialog is closed.
-        val = dlg.ShowModal()
+        val = dlg.Show(True)
+
+        print dlg.GetReturnCode()
+
 #        dlg.Show()
     
         #if val == wx.ID_OK:
             
         #else:
-        dlg.Destroy()
+        #dlg.Destroy()
 
 #---------------------------------------------------------------------------
-
 
 # Pannello principale del Frame        
 class MainPanel(wx.Panel):
@@ -294,10 +288,10 @@ class MainPanel(wx.Panel):
         mainSizer.Add(splitter, 1, wx.EXPAND) #Aggiunge lo splitter
         
         # Aggiungi (in alto) il pannello delle Registrazioni da completare      
-        self.recPanel = RecorderPanel.RecorderPanel(splitter, -1, self,self.parent)
+        self.recPanel = RecorderPanel(splitter, -1, self,self.parent)
         
         # Aggiungi (in basso) il pannello delle Registrazioni completate      
-        self.comPanel = CompletedPanel.CompletedPanel(splitter, -1,self,self.parent)
+        self.comPanel = CompletedPanel(splitter, -1,self,self.parent)
         
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         
@@ -333,11 +327,7 @@ class MainPanel(wx.Panel):
         #else:
         recDialog.Destroy()
 
-
-
 #---------------------------------------------------------------------------
-
-
 
 if __name__ == '__main__':
     app = wx.App()

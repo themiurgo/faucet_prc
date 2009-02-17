@@ -1,5 +1,5 @@
 import wx
-import wx.lib.masked           as masked
+import wx.lib.masked as masked
 
 typeReg=['Radio','TV']
 stationTV=['Rai1','Rai2']
@@ -230,3 +230,63 @@ class formatComboBox(wx.ComboBox):
         #data = evt.GetString()
         #print data
       
+
+class SettingsDialog(wx.Dialog):
+    def __init__(
+            self, parent, ID, title, size=wx.DefaultSize, pos=wx.DefaultPosition, 
+            style=wx.DEFAULT_DIALOG_STYLE):
+        wx.Dialog.__init__(self, parent, -1)
+        
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        label = wx.StaticText(self, -1, "Impostazioni dell'account")
+        label.SetHelpText("This is the help text for the label")
+        sizer.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        box = wx.BoxSizer(wx.HORIZONTAL)
+
+        label = wx.StaticText(self, -1, "Username")
+        label.SetHelpText("This is the help text for the label")
+        box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        text = wx.TextCtrl(self, -1, "", size=(80,-1))
+        text.SetHelpText("Here's some help text for field #1")
+        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+        box = wx.BoxSizer(wx.HORIZONTAL)
+
+        label = wx.StaticText(self, -1, "Password")
+        label.SetHelpText("This is the help text for the label")
+        box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        text = wx.TextCtrl(self, -1, "", size=(80,-1),style=wx.TE_PASSWORD)
+        text.SetHelpText("Here's some help text for field #2")
+        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+        sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+
+        btnsizer = wx.StdDialogButtonSizer()
+        
+        if wx.Platform != "__WXMSW__":
+            btn = wx.ContextHelpButton(self)
+            btnsizer.AddButton(btn)
+        
+        btn = wx.Button(self, wx.ID_OK)
+        btn.SetHelpText("Salva i cambiamenti")
+        btn.SetDefault()
+        btnsizer.AddButton(btn)
+
+        btn = wx.Button(self, wx.ID_CANCEL)
+        btn.SetHelpText("Annulla i cambiamenti")
+        btnsizer.AddButton(btn)
+        btnsizer.Realize()
+
+        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+        self.SetSizer(sizer)
+        sizer.Fit(self)
