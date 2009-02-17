@@ -10,18 +10,18 @@ STRING_DOWNLOADED='Scaricato'
 
 # Dizionario pre-caricato per le prove
 recordings_future = {
-0 : ('Presa Diretta', 'Rai3', '15/02/2009','21:20','02:15','DivX','TV'),
-1 : ('Viva Radio 2', 'Radio2', '16/02/2009','13:30','00:30','iPod','Radio')
+0 : ('Presa Diretta', 'Rai3', '15/02/2009 21:20','02:15','DivX','TV'),
+1 : ('Viva Radio 2', 'Radio2', '16/02/2009 13:30','00:30','iPod','Radio')
 }
 
 recordings_past = {
-0 : (STRING_DOWNLOADED, '1AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
-1 : (STRING_WAITING, '2Hit List','RadioDJ', '13/02/2009','15:00','01:15','mp3','Radio'),
-2 : (STRING_DOWNLOADED, '3Hit List','Virgin Radio', '13/02/2009','14:00','01:00','mp3','Radio'),
-3 : (STRING_WAITING, '4AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
-4 : (STRING_WAITING, '5AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
-5 : (STRING_AVAILABLE, '6AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV'),
-6 : (STRING_DOWNLOADED, '7AnnoZero','Rai3', '08/02/2009','22:00','02:30','DivX','TV')
+0 : (STRING_DOWNLOADED, '1AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
+1 : (STRING_WAITING, '2Hit List','RadioDJ', '13/02/2009 15:00','01:15','mp3','Radio'),
+2 : (STRING_DOWNLOADED, '3Hit List','Virgin Radio', '13/02/2009 14:00','01:00','mp3','Radio'),
+3 : (STRING_WAITING, '4AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
+4 : (STRING_WAITING, '5AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
+5 : (STRING_AVAILABLE, '6AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
+6 : (STRING_DOWNLOADED, '7AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV')
 }
 
 
@@ -33,7 +33,7 @@ recordings_past = {
 class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,ListCtrlAutoWidthMixin):
     def __init__(self, parent):
         wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT)
-        ColumnSorterMixin.__init__(self, 7)
+        ColumnSorterMixin.__init__(self, 6)
         ListCtrlAutoWidthMixin.__init__(self)
         self.itemDataMap = recordings_future
 
@@ -68,11 +68,11 @@ class RecorderPanel(wx.Panel):
         self.list =  SortedListCtrl(self)
         self.list.InsertColumn(0, 'Titolo', width=140)
         self.list.InsertColumn(1, 'Canale', width=widthCol)
-        self.list.InsertColumn(2, 'Giorno', width=widthCol)
-        self.list.InsertColumn(3, 'Inizio', width=widthCol)
-        self.list.InsertColumn(4, 'Durata', width=widthCol)
-        self.list.InsertColumn(5, 'Formato', width=widthCol)
-        self.list.InsertColumn(6, 'Tipo', width=widthCol)
+        self.list.InsertColumn(2, 'Data', width=2*widthCol)
+        #self.list.InsertColumn(3, 'Inizio', width=widthCol)
+        self.list.InsertColumn(3, 'Durata', width=widthCol)
+        self.list.InsertColumn(4, 'Formato', width=widthCol)
+        self.list.InsertColumn(5, 'Tipo', width=widthCol)
         
         
         # Risultato della funzione items() su vecchi dati di esempio
@@ -102,7 +102,7 @@ class RecorderPanel(wx.Panel):
         self.list.SetStringItem(index, 3, data[3])
         self.list.SetStringItem(index, 4, data[4])
         self.list.SetStringItem(index, 5, data[5])
-        self.list.SetStringItem(index, 6, data[6])
+        #self.list.SetStringItem(index, 6, data[6])
         #self.list.SetStringItem(index, 7, data[7])
         self.list.SetItemData(index, key)
     
@@ -150,11 +150,11 @@ class CompletedPanel(wx.Panel):
         self.list.InsertColumn(0, 'Stato', width=120)
         self.list.InsertColumn(1, 'Titolo', width=140)
         self.list.InsertColumn(2, 'Canale', width=widthCol)
-        self.list.InsertColumn(3, 'Giorno', width=widthCol)
-        self.list.InsertColumn(4, 'Inizio', width=widthCol)
-        self.list.InsertColumn(5, 'Durata', width=widthCol)
-        self.list.InsertColumn(6, 'Formato', width=widthCol)
-        self.list.InsertColumn(7, 'Tipo', width=widthCol)
+        self.list.InsertColumn(3, 'Data', width=2*widthCol)
+        #self.list.InsertColumn(4, 'Inizio', width=widthCol)
+        self.list.InsertColumn(4, 'Durata', width=widthCol)
+        self.list.InsertColumn(5, 'Formato', width=widthCol)
+        self.list.InsertColumn(6, 'Tipo', width=widthCol)
 
         #for i in packages:
          #   index = self.list.InsertStringItem(sys.maxint, i[0])
@@ -188,7 +188,7 @@ class CompletedPanel(wx.Panel):
         self.list.SetStringItem(index, 4, data[4])
         self.list.SetStringItem(index, 5, data[5])
         self.list.SetStringItem(index, 6, data[6])
-        self.list.SetStringItem(index, 7, data[7])
+        #self.list.SetStringItem(index, 7, data[7])
         self.list.SetItemData(index, key)
         if data[0] == STRING_DOWNLOADED:
             self.SetCompleteColour(index)
