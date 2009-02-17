@@ -1,6 +1,9 @@
 import wx
 
 typeReg=['Radio','TV']
+stationTV=['Rai1','Rai2']
+stationRadio=['Radio3','VirginRadio']
+NO_SELECTION='---'
 
 # Questa classe rappresenta la finestra che crea una
 # nuova registrazione. Ancora in fase di progettazione
@@ -36,28 +39,34 @@ class RecorderDialog(wx.Dialog):
      # 2nd Level -------------------------
         
         secondBox = wx.BoxSizer(wx.HORIZONTAL)
+        
+        stationLabel = wx.StaticText(self, -1, "Emittente:")
+        stationLabel.SetHelpText("Radio o televisiva")
+        
 
+        stationCB = stationComboBox(self)
+        stationCB.SetHelpText("Here's some help text for field #3")
+        
+        #self.text3=text
+        
         typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
         typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
         secondBox.Add(typeLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        typeCB = typeComboBox(self)
+        typeCB = typeComboBox(self,stationCB)
         typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
-        secondBox.Add(typeCB, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        secondBox.Add(typeCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         #self.text2=text
+        
+        secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        secondBox.Add(stationCB, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
         
         mainSizer.Add(secondBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
 
-        label4 = wx.StaticText(self, -1, "Field #3:")
-        label4.SetHelpText("This is the help text for the label")
-        box.Add(label4, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        text = wx.TextCtrl(self, -1, "", size=(80,-1))
-        text.SetHelpText("Here's some help text for field #3")
-        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-        self.text3=text
+        
         
         mainSizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
@@ -91,17 +100,41 @@ class RecorderDialog(wx.Dialog):
         return result
         
 class typeComboBox(wx.ComboBox):
-    def __init__(self,parent):
-        wx.ComboBox.__init__(self,parent,500,choices=typeReg,style=wx.CB_READONLY)
+    def __init__(self,parent,stationCB):
+        wx.ComboBox.__init__(self,parent,value=NO_SELECTION,choices=typeReg,style=wx.CB_READONLY)
         
+        self.stationCB=stationCB
         #typeReg = ['Radio','TV']
-        self.SetValue(typeReg[1])
+        #self.SetValue(typeReg[1])
 
         self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox)
     # When the user selects something, we go here.
     def EvtComboBox(self, evt):
         #cb = evt.GetEventObject()
         data = evt.GetString()
+        self.stationCB.SetStations(data)
+        #print data
+        
+        
+class stationComboBox(wx.ComboBox):
+    def __init__(self,parent):
+        wx.ComboBox.__init__(self,parent,value=NO_SELECTION,choices=stationTV,style=wx.CB_READONLY)
+        
+        #typeReg = ['Radio','TV']
+        #self.SetValue(typeReg[1])
+
+        #self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox)
+    
+    def SetStations(self,stationType):
+        self.Clear()
+        self.SetValue(NO_SELECTION)
+        if stationType == typeReg[0]:
+            #self.Clear()
+            self.AppendItems(stationRadio)
+        elif stationType == typeReg[1]:
+            self.AppendItems(stationTV)
+        #cb = evt.GetEventObject()
+        #data = evt.GetString()
         #print data
 
         
