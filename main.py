@@ -146,7 +146,7 @@ class MainStatusBar(wx.StatusBar):
 # Finestra Principale del Programma
 class wxCastFrame(wx.Frame):
     def __init__(self, parent, id, title):
-        wx.Frame.__init__(self, parent, id, title, size=(800, 600),style=wx.EXPAND)
+        wx.Frame.__init__(self, parent, id, title, size=(800, 600))
 
 #        self.DrawToolbar()
         

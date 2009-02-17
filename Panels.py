@@ -49,7 +49,7 @@ class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,ListCtrlAutoWidthMixin):
 #Pannello (in alto) delle registrazioni puntate e da ultimare
 class RecorderPanel(wx.Panel):
     def __init__(self, parent, id,panel,frame):
-        wx.Panel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1,style=wx.EXPAND)
         
         self.frame=frame
         self.panel=panel
