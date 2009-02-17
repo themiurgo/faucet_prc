@@ -9,11 +9,11 @@ class RecorderDialog(wx.Dialog):
             style=wx.DEFAULT_DIALOG_STYLE):
         wx.Dialog.__init__(self, parent, -1)
         
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
         
         label1 = wx.StaticText(self, -1, "This is a wx.Dialog")
         label1.SetHelpText("This is the help text for the label")
-        sizer.Add(label1, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        mainSizer.Add(label1, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -26,7 +26,7 @@ class RecorderDialog(wx.Dialog):
         box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.text1 = text       
         
-        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -39,7 +39,7 @@ class RecorderDialog(wx.Dialog):
         box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.text2=text
         
-        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -52,10 +52,10 @@ class RecorderDialog(wx.Dialog):
         box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.text3=text
         
-        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+        mainSizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
 
         btnsizer = wx.StdDialogButtonSizer()
         
@@ -73,11 +73,11 @@ class RecorderDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         #self.text = text
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
         
     def GetValues(self):
         result = (self.text1.GetValue() ,self.text2.GetValue() ,self.text3.GetValue())

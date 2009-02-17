@@ -100,7 +100,11 @@ class CompletedPanel(wx.Panel):
         self.list.SetStringItem(index, 6, data[6])
         self.list.SetStringItem(index, 7, data[7])
         self.list.SetItemData(index, key)
+        if data[0] == STRING_DOWNLOADED:
+            self.SetCompleteColour(index)
     
+    def SetCompleteColour(self,index):
+        self.list.SetItemBackgroundColour(index,"light green")    
     # Studiare il funzionamento di queste funzioni per
     # capire come usare le caselle checkbox ... work in progress...    
     def OnSelectAll(self, event):
@@ -128,7 +132,7 @@ class CompletedPanel(wx.Panel):
                 self.list.DeleteItem(i-count)
                 count+=1; 
                 del recordings[itemData]
-        print len(recordings)
+       # print len(recordings)
                 
                 
             #print item
