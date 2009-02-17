@@ -21,7 +21,7 @@ class RecorderDialog(wx.Dialog):
         
         header = wx.StaticText(self, -1, "Inserisci tutti i campi per creare\n la nuova registrazione",style=wx.ALIGN_CENTRE)
         header.SetHelpText("Per modificare i canali visualizzatti vai su preferenze")
-        mainSizer.Add(header, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        mainSizer.Add(header, 0, wx.ALIGN_CENTRE)
 
     # 1st Level -------------------------
         

@@ -49,7 +49,7 @@ class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,ListCtrlAutoWidthMixin):
 #Pannello (in alto) delle registrazioni puntate e da ultimare
 class RecorderPanel(wx.Panel):
     def __init__(self, parent, id,panel,frame):
-        wx.Panel.__init__(self, parent, -1,style=wx.EXPAND)
+        wx.Panel.__init__(self, parent, -1)
         
         self.frame=frame
         self.panel=panel
@@ -68,7 +68,7 @@ class RecorderPanel(wx.Panel):
         self.list =  SortedListCtrl(self)
         self.list.InsertColumn(0, 'Titolo', width=140)
         self.list.InsertColumn(1, 'Canale', width=widthCol)
-        self.list.InsertColumn(2, 'Data', width=2*widthCol)
+        self.list.InsertColumn(2, 'Data', width=widthCol)
         #self.list.InsertColumn(3, 'Inizio', width=widthCol)
         self.list.InsertColumn(3, 'Durata', width=widthCol)
         self.list.InsertColumn(4, 'Formato', width=widthCol)
