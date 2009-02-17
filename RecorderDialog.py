@@ -1,8 +1,11 @@
 import wx
+import wx.lib.masked           as masked
 
 typeReg=['Radio','TV']
 stationTV=['Rai1','Rai2']
 stationRadio=['Radio3','VirginRadio']
+formatTV=['iPod','DivX']
+formatRadio=['mp3']
 NO_SELECTION='---'
 
 # Questa classe rappresenta la finestra che crea una
@@ -43,32 +46,94 @@ class RecorderDialog(wx.Dialog):
         stationLabel = wx.StaticText(self, -1, "Emittente:")
         stationLabel.SetHelpText("Radio o televisiva")
         
-
         stationCB = stationComboBox(self)
         stationCB.SetHelpText("Here's some help text for field #3")
         
-        #self.text3=text
+        
+        formatLabel = wx.StaticText(self, -1, "Formato di compressione:")
+        formatLabel.SetHelpText("Help")
+        
+        formatCB = formatComboBox(self)
+        formatCB.SetHelpText("Here's some help text for field #3")
+        
         
         typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
         typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
         secondBox.Add(typeLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        typeCB = typeComboBox(self,stationCB)
+        typeCB = typeComboBox(self,stationCB,formatCB)
         typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
         secondBox.Add(typeCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        #self.text2=text
+ 
         
-        secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        secondBox.Add(stationCB, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        #secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        #secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE)
+        secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE)
+        
+        secondBox.Add(formatLabel, 0, wx.ALIGN_CENTRE)
+        secondBox.Add(formatCB, 0, wx.ALIGN_CENTRE)
         
         
         mainSizer.Add(secondBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
-        box = wx.BoxSizer(wx.HORIZONTAL)
+       
+   # 3rd Level -------------------------------
+        
+        thirdBox = wx.BoxSizer(wx.HORIZONTAL)
+        
+        mainSizer.Add(thirdBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
+        dateLabel = wx.StaticText(self, -1, "Giorno : ")
+        dateLabel.SetHelpText("Help")
+        thirdBox.Add(dateLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         
         
-        mainSizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
+        
+        dpc = wx.DatePickerCtrl(self, size=(120,-1),
+                                style = wx.DP_DROPDOWN
+                                      | wx.DP_ALLOWNONE)
+                                      #| wx.DP_ALLOWNONE )
+        #self.Bind(wx.EVT_DATE_CHANGED, self.OnDateChanged, dpc)
+        #sizer.Add(dpc, 0, wx.ALL, 50)
+
+        if 'wxMSW' in wx.PlatformInfo:
+            dpc = wx.GenericDatePickerCtrl(self, size=(120,-1),
+                                           style = wx.DP_DROPDOWN
+                                               | wx.DP_SHOWCENTURY
+                                               | wx.DP_ALLOWNONE )
+            self.Bind(wx.EVT_DATE_CHANGED, self.OnDateChanged, dpc)
+            #sizer.Add(dpc, 0, wx.LEFT, 50)
+            
+        thirdBox.Add(dpc, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        
+        spin2 = wx.SpinButton( self, -1, style=wx.SP_VERTICAL )
+        time24 = masked.TimeCtrl(
+                        self, -1, name="24 hour control", fmt24hr=True,
+                        spinButton = spin2
+                        )
+                        
+        hourLabel = wx.StaticText(self, -1, "Ora inizio : ")
+        hourLabel.SetHelpText("Help")
+        thirdBox.Add(hourLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)                
+        thirdBox.Add(time24, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        thirdBox.Add(spin2, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        sliderLabel = wx.StaticText(self, -1, "Durata : ")
+        sliderLabel.SetHelpText("Help")
+        thirdBox.Add(sliderLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        slider = wx.Slider(
+            self, 100, 25, 1, 100, (30, 60), (250, -1), 
+            wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_LABELS 
+            )
+
+        slider.SetTickFreq(5, 1)
+        
+        thirdBox.Add(slider, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
 
         line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
         mainSizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
@@ -89,9 +154,8 @@ class RecorderDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        mainSizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        
-        #self.text = text
+        mainSizer.Add(btnsizer, 0, wx.ALIGN_CENTER|wx.ALL, 5)
+
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
         
@@ -100,10 +164,11 @@ class RecorderDialog(wx.Dialog):
         return result
         
 class typeComboBox(wx.ComboBox):
-    def __init__(self,parent,stationCB):
+    def __init__(self,parent,stationCB,formatCB):
         wx.ComboBox.__init__(self,parent,value=NO_SELECTION,choices=typeReg,style=wx.CB_READONLY)
         
         self.stationCB=stationCB
+        self.formatCB=formatCB
         #typeReg = ['Radio','TV']
         #self.SetValue(typeReg[1])
 
@@ -113,12 +178,13 @@ class typeComboBox(wx.ComboBox):
         #cb = evt.GetEventObject()
         data = evt.GetString()
         self.stationCB.SetStations(data)
+        self.formatCB.SetFormats(data)
         #print data
         
         
 class stationComboBox(wx.ComboBox):
     def __init__(self,parent):
-        wx.ComboBox.__init__(self,parent,value=NO_SELECTION,choices=stationTV,style=wx.CB_READONLY)
+        wx.ComboBox.__init__(self,parent,value=NO_SELECTION,style=wx.CB_READONLY)
         
         #typeReg = ['Radio','TV']
         #self.SetValue(typeReg[1])
@@ -136,5 +202,26 @@ class stationComboBox(wx.ComboBox):
         #cb = evt.GetEventObject()
         #data = evt.GetString()
         #print data
-
         
+        
+class formatComboBox(wx.ComboBox):
+    def __init__(self,parent):
+        wx.ComboBox.__init__(self,parent,value=NO_SELECTION,style=wx.CB_READONLY)
+        
+        #typeReg = ['Radio','TV']
+        #self.SetValue(typeReg[1])
+
+        #self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox)
+    
+    def SetFormats(self,stationType):
+        self.Clear()
+        self.SetValue(NO_SELECTION)
+        if stationType == typeReg[0]:
+            #self.Clear()
+            self.AppendItems(formatRadio)
+        elif stationType == typeReg[1]:
+            self.AppendItems(formatTV)
+        #cb = evt.GetEventObject()
+        #data = evt.GetString()
+        #print data
+      
