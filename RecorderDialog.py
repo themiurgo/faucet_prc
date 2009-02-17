@@ -49,7 +49,7 @@ class RecorderDialog(wx.Dialog):
         stationCB = stationComboBox(self)
         stationCB.SetHelpText("Here's some help text for field #3")
         
-        
+            
         formatLabel = wx.StaticText(self, -1, "Formato di compressione:")
         formatLabel.SetHelpText("Help")
         
@@ -69,14 +69,19 @@ class RecorderDialog(wx.Dialog):
         #secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         #secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         
-        secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE)
-        secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE)
+        thirdBox = wx.BoxSizer(wx.HORIZONTAL)
+        thirdBox.Add(stationLabel, 0, wx.ALIGN_CENTRE)
+        thirdBox.Add(stationCB, 0, wx.ALIGN_CENTRE)
         
-        secondBox.Add(formatLabel, 0, wx.ALIGN_CENTRE)
-        secondBox.Add(formatCB, 0, wx.ALIGN_CENTRE)
+
+        fourthBox = wx.BoxSizer(wx.HORIZONTAL)
+        fourthBox.Add(formatLabel, 0, wx.ALIGN_CENTRE)
+        fourthBox.Add(formatCB, 0, wx.ALIGN_CENTRE)
         
         
         mainSizer.Add(secondBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(thirdBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(fourthBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
        
    # 3rd Level -------------------------------
