@@ -307,11 +307,13 @@ class MainPanel(wx.Panel):
         
         #Associa un'azione ai bottoni
         self.Bind(wx.EVT_BUTTON, self.OnAdd, addButton)
+        self.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveCompleted, clearButton)
+        self.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveSelected, deleteButton)
         
         
     # Mostra la finestra per aggiungere una Registrazione
     def OnAdd(self, evt):
-        recDialog = RecorderDialog.RecorderDialog(self, -1, "Crea un nuova Registrazione", size=(350, 200), style=wx.DEFAULT_DIALOG_STYLE)
+        recDialog = RecorderDialog(self, -1, "Crea un nuova Registrazione", size=(350, 200), style=wx.DEFAULT_DIALOG_STYLE)
         recDialog.CenterOnScreen()
 
         # Per capire se l'utente ha premuto Ok o Abort

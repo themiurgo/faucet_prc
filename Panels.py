@@ -206,6 +206,17 @@ class CompletedPanel(wx.Panel):
         num = self.list.GetItemCount()
         for i in range(num):
             self.list.CheckItem(i, False)
+            
+    def OnRemoveSelected(self, event):
+        num = self.list.GetItemCount()
+        count=0
+        for i in range(num):
+           if self.list.IsChecked(i-count):
+                itemData = self.list.GetItemData(i-count)
+                self.list.DeleteItem(i-count)
+                count+=1; 
+                del recordings_past[itemData]
+
 
     def OnRemoveCompleted(self, event):
         num = self.list.GetItemCount()
