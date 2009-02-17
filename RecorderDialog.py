@@ -1,6 +1,6 @@
 import wx
 
-source=['Radio','TV']
+typeReg=['Radio','TV']
 
 # Questa classe rappresenta la finestra che crea una
 # nuova registrazione. Ancora in fase di progettazione
@@ -92,10 +92,10 @@ class RecorderDialog(wx.Dialog):
         
 class typeComboBox(wx.ComboBox):
     def __init__(self,parent):
-        wx.ComboBox.__init__(self,parent,500,choices=source,style=wx.CB_READONLY)
+        wx.ComboBox.__init__(self,parent,500,choices=typeReg,style=wx.CB_READONLY)
         
-        #source = ['Radio','TV']
-        self.SetValue(source[1])
+        #typeReg = ['Radio','TV']
+        self.SetValue(typeReg[1])
 
         self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox)
     # When the user selects something, we go here.
