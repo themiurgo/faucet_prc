@@ -25,19 +25,41 @@ class PopMenuRecorder(wx.Menu):
         self.panel=panel
         self.frame=frame
 
-        item1 = wx.MenuItem(self, wx.NewId(), "Aggiungi...")
+        item1 = wx.MenuItem(self,wx.NewId(),
+                "&Nuova Registrazione",
+                "Elimina i download completati")
+        iconPath ="./img/add.ico"
+        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
+        item1.SetBitmap(wx.BitmapFromImage(icon)) 
         self.AppendItem(item1)
-        #Per qualche motivo strano, se mettessi la chiamata 'OnAdd' nella
-        #apposita funzione OnItem1, non funziona
+        
+        
+
+       # item1 = wx.MenuItem(self, , ")
+        #self.AppendItem(item1)
+        
         self.Bind(wx.EVT_MENU,  self.panel.OnAdd , item1)
         
-        item2 = wx.MenuItem(self, wx.NewId(),"Minimizza")
+        item2 = wx.MenuItem(self,wx.NewId(),
+                "&Minimizza",
+                "Minimizza la finestra")
+        iconPath ="./img/minimize.ico"
+        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
+        item2.SetBitmap(wx.BitmapFromImage(icon)) 
         self.AppendItem(item2)
+        
+        #item2 = wx.MenuItem(self, wx.NewId(),"")
+        #self.AppendItem(item2)
         self.Bind(wx.EVT_MENU, self.OnItem2, item2)
         
-        # Idem come sopra
-        item3 = wx.MenuItem(self, wx.NewId(),"Chiudi")
+        item3 = wx.MenuItem(self,wx.NewId(),
+                "&Esci",
+                "Abbandona Faucet PRC")
+        iconPath ="./img/exit.ico"
+        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
+        item3.SetBitmap(wx.BitmapFromImage(icon)) 
         self.AppendItem(item3)
+        
         self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, item3)
 
     #def OnItem1(self, event):
