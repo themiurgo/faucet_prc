@@ -123,6 +123,7 @@ class Account(object):
         self.connection.add_rest_credentials(username, password)
         
         c = self.connection.request_get('/faucetid')
+        print c
         if c['body'] == 'Access Denied':
             raise Exception('Wrong credentials')
         self.id_usr = json.loads(c['body'])['id_usr']
