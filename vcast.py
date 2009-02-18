@@ -7,8 +7,6 @@ from restful_lib import Connection
 import re
 import feedparser
 
-r = Recordings()
-
 def timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
     """This function will spawn a thread and run the given function
     using the args, kwargs and return the given default value if the
@@ -29,25 +27,31 @@ def timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
         return it.result
 
 class Recordings(object):
-    """Class Recordings is a singleton"""
-    __single = None
+    """Archive of recordings"""
 
-    def __init__(self):
-        if Recordings.__single is None:
-            Recordings.__single = Recordings.Singleton
-            self.recordings = {}
-        Singleton.__single = self
-
-    def save(self):
+    def __init__(self, username, password):
+        self.recordings = {}
+        try:
+            self.account = Account(username, password)
+        except:
+            print 'No connection or wrong credentials'
+    
+    def saveFile(self):
         f = open('recordings.obj', 'w')
         pickle.dump(self.recordings, f)
 
-    def load(self):
+    def loadFile(self):
         f = open('recordings.obj', 'r')
         self.recordings = pickle.load(f)
 
     def download(self, username, password):
-        a = Account(username, password)
+        """Download active recordings list and refresh local data
+        
+        The function first downloads active recordings, then checks which of
+        them has a download link.
+        """
+        a = self.account
+
         try:
             recs = a.get_recordings()
         except ServerNotFoundError:
@@ -55,6 +59,7 @@ class Recordings(object):
             return
         if recs == None:
             return
+
         self.recordings = {}
         for i in recs:
             id_rec = int(i['id_rec'])
@@ -62,18 +67,36 @@ class Recordings(object):
                     i['title'], i['channel'], i['channel_type'],
                     i['from_time'], i['rec_time'])
         urls = a.get_download_urls()
+
         for i in urls:
+            # Take ID from url and assign it to the object
             m = re.search(r"_(\d+)\.", i)
             id = int(m.group(1))
             try:
                 self.recordings[id].url = i
             except:
-                print "Recording",id,"not found"
+                print "Recording", id, "not found"
+
+    def delRecording(self, id):
+        """Delete a Recording
+
+        Removes the recording both from remote and local.
+        """
+        del self.recordings[id]
+        if not self.account:
+            return
+        self.account.delete_recording(self.id_rec)
+        del recordings.r[id_rec]
+
+    def get_channels(self):
+        pass
 
 class Account(object):
     """A vcast account"""
 
     def __init__(self, username, password):
+        """Set up a REST connection to Vcast Server"""
+
         url = 'http://www.vcast.it/faucetpvr/api/1.0/server_rest.php'
         self.connection = Connection(url)
         self.connection.add_rest_credentials(username, password)
@@ -82,7 +105,6 @@ class Account(object):
         if c['body'] == 'Access Denied':
             raise Exception('Wrong credentials')
         self.id_usr = json.loads(c['body'])['id_usr']
-        Recording.a = self
 
     def get_channels(self):
         return self.connection.request_get('/channels')
@@ -133,17 +155,5 @@ class Recording(object):
         self.retention = "3"
         self.has_download = False
 
-    def save(self):
-        """
-        Return id_rec or -1 if error
-        """
-
-        pass
-
-    def delete(self):
-        if not self.a:
-            return
-        self.a.delete_recording(self.id_rec)
-        
 class Preferences(object):
     pass
