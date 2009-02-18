@@ -153,7 +153,12 @@ class CompletedPanel(wx.Panel):
         
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
 
-    def Populate(self, event):
+        # Aggiunta della lista
+        #vbox.Add(self.list, 1, wx.EXPAND)
+        
+        self.Populate()
+
+    def Populate(self):
         #for i in packages:
          #   index = self.list.InsertStringItem(sys.maxint, i[0])
           #  self.list.SetStringItem(index, 1, i[1])
@@ -164,9 +169,6 @@ class CompletedPanel(wx.Panel):
         for key, data in self.items:
             self.InsertValue(key,data)
 
-        # Aggiunta della lista
-        vbox.Add(self.list, 1, wx.EXPAND)
-        
     # Contextual menu (right-click in the list)
     def OnRightDown(self,event):
         self.PopupMenu(PopMenuCompleted.PopMenuCompleted(self, self.panel,
