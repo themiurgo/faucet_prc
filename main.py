@@ -7,7 +7,8 @@ from Panels import *
 # from taskbar import WxCastTaskBarIcon
 
 # Codici utili per la gestione eventi
-ID_ABOUT = 101
+ID_INFO = 101
+ID_ABOUT = 105
 ID_EXIT = 110
 ID_ACCOUNT = 120
 ID_CHANNELS = 121
@@ -58,25 +59,49 @@ class MainMenuBar(wx.MenuBar):
         # Menu (I livello)
         filemenu = wx.Menu()
         impostazioni = wx.Menu()
+        about = wx.Menu()
 
         # Sottomenu FILE
-        filemenu.Append(ID_ABOUT,
+        item = wx.MenuItem(filemenu,ID_INFO,
                 "&Informazioni\tCTRL+I",
                 "Informazioni sull'applicazione")
+        iconPath ="./img/info.ico"
+        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
+        item.SetBitmap(wx.BitmapFromImage(icon)) 
+        filemenu.AppendItem(item)
         filemenu.AppendSeparator()
-        filemenu.Append(ID_EXIT,
+        
+        item = wx.MenuItem(filemenu,ID_EXIT,
                 "&Esci\tCTRL+Q",
                 "Esci dall'applicazione")
+        iconPath ="./img/exit.ico"
+        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
+        item.SetBitmap(wx.BitmapFromImage(icon)) 
+        filemenu.AppendItem(item)
+        #filemenu.Append()
         self.Append(filemenu, "&File")
 
         # Sottomenu IMPOSTAZIONI
         self.Append(impostazioni, "&Impostazioni")
-        impostazioni.Append(ID_ACCOUNT,
+        
+        item = wx.MenuItem(impostazioni,ID_ACCOUNT,
                 "&Account\tCTRL+A",
                 "Imposta le credenziali dell'account Vcast")
+        iconPath ="./img/userinfo.ico"
+        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
+        item.SetBitmap(wx.BitmapFromImage(icon)) 
+        impostazioni.AppendItem(item)
+       
+        
         impostazioni.Append(ID_CHANNELS,
                 "&Canali\tCTRL+H",
                 "Imposta le preferenze sui canali")
+        
+        # Sottomenu ABOUT
+        self.Append(about, "&?")
+        about.Append(ID_ABOUT,
+                "A&bout\tCTRL+B",
+                "Informazioni su Faucet PRC")
 
         frame.Bind(wx.EVT_MENU, frame.Settings, id=ID_ACCOUNT)
 
@@ -144,7 +169,7 @@ class MainStatusBar(wx.StatusBar):
 #---------------------------------------------------------------------------
  
 # Finestra Principale del Programma
-class wxCastFrame(wx.Frame):
+class faucetPRCFrame(wx.Frame):
     def __init__(self, parent, id, title):
         wx.Frame.__init__(self, parent, id, title, size=(800, 600))
 
@@ -241,7 +266,7 @@ class wxCastFrame(wx.Frame):
 
     # Chiudi la finestra + Finestra di conferma
     def onCloseWindow(self,e):
-        confirmDialog = wx.MessageDialog(None, 'Sei sicuro di voler uscire?', 'Abbandona wxCast', wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+        confirmDialog = wx.MessageDialog(None, 'Sei sicuro di voler uscire?', 'Abbandona Faucet PRC', wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
         
         # Finestra di conferma
         choice = confirmDialog.ShowModal()
@@ -344,5 +369,5 @@ if __name__ == '__main__':
       #          title="Faucet PRC (Private Remote Contol)",
        #         size=(800,600),
         #        style=wx.DEFAULT_FRAME_STYLE)
-    wxCastFrame(None, -1, 'wxCast')
+    faucetPRCFrame(None, -1, 'Faucet PRC')
     app.MainLoop()
