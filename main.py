@@ -153,6 +153,10 @@ class wxCastFrame(wx.Frame):
         #Aggiungi il pannello che contiene bottoni e schede
         self.panel = MainPanel(self,id)
         
+        #sizer = wx.BoxSizer(wx.VERTICAL)
+        #sizer.Add(panel,1,wx.EXPAND)
+        #self.SetSizerAndFit(sizer)
+        
         #Creazione StatusBar 
         statusbar = MainStatusBar(self)
         self.SetStatusBar(statusbar)
@@ -300,10 +304,10 @@ class MainPanel(wx.Panel):
         deleteButton = wx.Button(self, wx.ID_DELETE)
         clearButton = wx.Button(self, wx.ID_CLEAR)
         saveButton = wx.Button(self, wx.ID_SAVE)
-        bottomSizer.Add(deleteButton)
-        bottomSizer.Add(clearButton)
-        bottomSizer.Add(saveButton)
-        mainSizer.Add(bottomSizer,0)
+        bottomSizer.Add(deleteButton,0,wx.EXPAND)
+        bottomSizer.Add(clearButton,0,wx.EXPAND)
+        bottomSizer.Add(saveButton,0,wx.EXPAND)
+        mainSizer.Add(bottomSizer,0,wx.EXPAND)
         
         #Associa un'azione ai bottoni
         self.Bind(wx.EVT_BUTTON, self.OnAdd, addButton)

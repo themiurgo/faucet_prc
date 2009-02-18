@@ -142,7 +142,7 @@ class CompletedPanel(wx.Panel):
         
         # Crea e aggiungi l'intestazione
         header = wx.StaticText(self, -1, 'Registrazioni Completate',style=wx.ALIGN_CENTER)
-        vbox.Add(header, 0, wx.EXPAND | wx.TOP)
+        vbox.Add(header, 0, wx.EXPAND)
         
         # Crea l'oggetto CheckListCtrl e le relative colonne
         widthCol=90
@@ -167,7 +167,7 @@ class CompletedPanel(wx.Panel):
             self.InsertValue(key,data)
 
         # Aggiunta della lista
-        vbox.Add(self.list, 1, wx.EXPAND | wx.TOP)
+        vbox.Add(self.list, 1, wx.EXPAND)
         
         self.SetBackgroundColour(wx.LIGHT_GREY)
         self.list.SetBackgroundColour(wx.LIGHT_GREY)
