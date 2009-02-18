@@ -275,6 +275,7 @@ if __name__ == '__main__':
 
     # Interface of Vcast API
     vcast.i = vcast.Interface()
+    vcast.i.setAccount('username','password')
     
     # First, try to load recordings and account informations
     # If no preferences, launch Wizard

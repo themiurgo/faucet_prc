@@ -66,13 +66,9 @@ class Interface(object):
         The function first downloads active recordings, then checks which of
         them has a download link.
         """
+        # self.loadFile()
+        recs = self.account.get_recordings()
         try:
-            self.loadFile()
-        except:
-            return []
-        try:
-            print 'here'
-            recs = a.get_recordings()
             print recs
         except:
             print 'No internet connection or server unreachable'
@@ -97,7 +93,7 @@ class Interface(object):
                 self.recordings[id].url = i
             except:
                 print "Recording", id, "not found"
-        self.save()
+        # self.saveFile()
         return self.recordings
 
     def delRecording(self, id):
