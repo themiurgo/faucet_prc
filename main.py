@@ -232,19 +232,17 @@ class MainPanel(wx.Panel):
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         
         #Aggiungi i due bottoni per l'eliminazione ed il download dei file
-        bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
-        deleteButton = wx.Button(self, wx.ID_DELETE)
-        clearButton = wx.Button(self, wx.ID_CLEAR)
+        #deleteButton = wx.Button(self, wx.ID_DELETE)
+        #clearButton = wx.Button(self, wx.ID_CLEAR)
         saveButton = wx.Button(self, wx.ID_SAVEAS)
-        bottomSizer.Add(deleteButton,0,wx.EXPAND)
-        bottomSizer.Add(clearButton,0,wx.EXPAND)
-        bottomSizer.Add(saveButton,0,wx.EXPAND)
-        mainSizer.Add(bottomSizer,0,wx.EXPAND)
+        #upperSizer.Add(deleteButton,0,wx.EXPAND)
+        #upperSizer.Add(clearButton,0,wx.EXPAND)
+        upSizer.Add(saveButton,0,wx.EXPAND)
         
         #Associa un'azione ai bottoni
         addButton.Bind(wx.EVT_BUTTON, self.OnAdd)
-        clearButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveCompleted)
-        deleteButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveSelected)
+        #clearButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveCompleted)
+        #deleteButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveSelected)
         saveButton.Enable(False)
         saveButton.Bind(wx.EVT_BUTTON, self.OnSaveAs)
 

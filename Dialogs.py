@@ -53,9 +53,12 @@ class RecorderDialog(wx.Dialog):
         stationLabel = wx.StaticText(self, -1, "Emittente:")
         stationLabel.SetHelpText("Radio o televisiva")
         
+        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
+        typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
+        gridSizer.Add(typeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
         stationCB = stationComboBox(self)
         stationCB.SetHelpText("Here's some help text for field #3")
-        
             
         formatLabel = wx.StaticText(self, -1, "Formato di compressione:")
         formatLabel.SetHelpText("Help")
@@ -63,15 +66,9 @@ class RecorderDialog(wx.Dialog):
         formatCB = formatComboBox(self)
         formatCB.SetHelpText("Here's some help text for field #3")
         
-        
-        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
-        typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
-        gridSizer.Add(typeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-
         typeCB = typeComboBox(self,stationCB,formatCB)
         typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
         gridSizer.Add(typeCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
- 
         
         #secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         #secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -79,12 +76,10 @@ class RecorderDialog(wx.Dialog):
         stationBox = wx.BoxSizer(wx.HORIZONTAL)
         gridSizer.Add(stationLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         gridSizer.Add(stationCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        
 
         formatBox = wx.BoxSizer(wx.HORIZONTAL)
         gridSizer.Add(formatLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         gridSizer.Add(formatCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        
         
         mainSizer.Add(gridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         #mainSizer.Add(stationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
@@ -167,8 +162,10 @@ class SettingsDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        label = wx.StaticText(self, -1, "Inserisci Username e Password:")
-        label.SetHelpText("Queste informazioni sono necessarie per connettersi al server Vcast Faucet")
+        label = wx.StaticText(self, -1,
+            "Inserisci le credenziali per l'accesso a Vcast. Per"+
+            " registrarti vai su vcast.it")
+        label.Wrap(250)
         sizer.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
@@ -238,8 +235,7 @@ class SettingsDialog(wx.Dialog):
             self.Destroy()
 
         except:
-            dlg = wx.MessageDialog(self, 'Wrong username or password.',
-                    'A Message Box',
-                    wx.OK | wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(self, 'Username o password errata.',
+                    'Errore di login', wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()

@@ -25,7 +25,8 @@ class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,
         ListCtrlAutoWidthMixin):
 
     def __init__(self, parent):
-        wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT)
+        wx.ListCtrl.__init__(self, parent, -1,
+                style=wx.LC_REPORT | wx.SUNKEN_BORDER)
         ColumnSorterMixin.__init__(self, 6)
         ListCtrlAutoWidthMixin.__init__(self)
         self.itemDataMap = recordings_future
@@ -47,7 +48,9 @@ class RecorderPanel(wx.Panel):
         
         header = wx.StaticText(self, -1, 'Registrazioni Programmate',
                 style=wx.ALIGN_CENTER)
-        header.Centre()
+        header.Fit()
+        header.Center()
+        header.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
         panelSizer.Add(header,0,wx.EXPAND)
         
         # Crea la lista e aggiungi le colonne
@@ -62,7 +65,7 @@ class RecorderPanel(wx.Panel):
 
         panelSizer.Add(self.list, 1, wx.EXPAND)
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
-        self.SetBackgroundColour(wx.WHITE)
+#        self.SetBackgroundColour(wx.WHITE)
 
         self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
 
@@ -156,7 +159,7 @@ class CompletedPanel(wx.Panel):
         
         # Crea l'oggetto CheckListCtrl e le relative colonne
         widthCol=90
-        self.list = CheckListCtrl(self)
+        self.list = SortedListCtrl(self)
         self.list.InsertColumn(0, 'Titolo', width=140)
         self.list.InsertColumn(1, 'Canale', width=widthCol)
         self.list.InsertColumn(2, 'Data', width=2*widthCol)
@@ -168,8 +171,8 @@ class CompletedPanel(wx.Panel):
         # Aggiunta della lista
         vbox.Add(self.list, 1, wx.EXPAND | wx.TOP)
         
-        self.SetBackgroundColour(wx.LIGHT_GREY)
-        self.list.SetBackgroundColour(wx.LIGHT_GREY)
+#        self.SetBackgroundColour(wx.LIGHT_GREY)
+#        self.list.SetBackgroundColour(wx.WHITE)
         #vbox.Add((-1, 10))
         
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
