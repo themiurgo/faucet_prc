@@ -46,12 +46,17 @@ class RecorderPanel(wx.Panel):
         panelSizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(panelSizer)
         
-        header = wx.StaticText(self, -1, 'Registrazioni Programmate',
+        self.header = wx.StaticText(self, -1, 'Registrazioni Programmate',
                 style=wx.ALIGN_CENTER)
-        header.Fit()
-        header.Center()
-        header.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        panelSizer.Add(header,0,wx.EXPAND)
+
+        #self.header.Centre()
+        panelSizer.Add(self.header,0,wx.EXPAND|wx.ALIGN_CENTER)
+
+        self.header.Fit()
+        #header.Center()
+        self.header.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
+        #panelSizer.Add(header,0,wx.EXPAND)
+
         
         # Crea la lista e aggiungi le colonne
         widthCol = 90

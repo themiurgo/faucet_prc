@@ -81,10 +81,95 @@ class RecorderDialog(wx.Dialog):
         gridSizer.Add(formatLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         gridSizer.Add(formatCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
-        mainSizer.Add(gridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        #mainSizer.Add(stationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        #mainSizer.Add(formatBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+       
+    # DATE -------------------------------
         
+
+        dateBox = wx.BoxSizer(wx.HORIZONTAL)
+        
+        dateLabel = wx.StaticText(self, -1, "Giorno : ")
+        dateLabel.SetHelpText("Help")
+        dateBox.Add(dateLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        dpc = wx.DatePickerCtrl(self, size=(120,-1),
+                                style = wx.DP_DROPDOWN
+                                      | wx.DP_ALLOWNONE)
+                                      #| wx.DP_ALLOWNONE )
+        #self.Bind(wx.EVT_DATE_CHANGED, self.OnDateChanged, dpc)
+        #sizer.Add(dpc, 0, wx.ALL, 50)
+
+        if 'wxMSW' in wx.PlatformInfo:
+            dpc = wx.GenericDatePickerCtrl(self, size=(120,-1),
+                                           style = wx.DP_DROPDOWN
+                                               #| wx.DP_SHOWCENTURY
+                                               | wx.DP_ALLOWNONE )
+            self.Bind(wx.EVT_DATE_CHANGED, self.OnDateChanged, dpc)
+            #sizer.Add(dpc, 0, wx.LEFT, 50)
+            
+        dateBox.Add(dpc, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        
+        spin2 = wx.SpinButton( self, -1, style=wx.SP_VERTICAL )
+        time24 = masked.TimeCtrl(
+                        self, -1, name="24 hour control", fmt24hr=True,
+                        spinButton = spin2
+                        )
+                        
+        hourLabel = wx.StaticText(self, -1, "Ora inizio : ")
+        hourLabel.SetHelpText("Help")
+        dateBox.Add(hourLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)                
+        dateBox.Add(time24, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        dateBox.Add(spin2, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        
+        
+    # DURATION -------------------------------
+        
+        durationBox = wx.BoxSizer(wx.HORIZONTAL)
+        
+        #durationGridSizer= wx.FlexGridSizer(2,4,3,3)
+        
+        sliderLabel = wx.StaticText(self, -1, "Durata (min) : ")
+        sliderLabel.SetHelpText("Help")
+        durationBox.Add(sliderLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        durationBox.AddSpacer(10,100000)
+       
+        endLabel = wx.StaticText(self, -1, "Ora Termine : ")
+        endLabel.SetHelpText("Help")
+        durationBox.Add(endLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        endTimeLabel = wx.StaticText(self, -1, "00:00:00")
+        endTimeLabel.SetHelpText("Help")
+        durationBox.Add(endTimeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        
+     # SLIDER -------------------------------
+     
+        sliderBox = wx.BoxSizer(wx.HORIZONTAL)
+     
+        slider = wx.Slider(
+            self, -1, 30, 1, 180, (30, 100), (120, -1), 
+             wx.SL_LABELS | wx.SL_BOTTOM | wx.SL_HORIZONTAL | wx.SL_AUTOTICKS
+            )
+
+        slider.SetTickFreq(1, 1)
+        
+        #durationBox.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        sliderBox.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+       
+        
+        mainSizer.Add(gridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
+        mainSizer.Add(dateBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
+        mainSizer.Add(durationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
+        mainSizer.Add(sliderBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+       
+       
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
         
