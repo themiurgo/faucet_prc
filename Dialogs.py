@@ -110,17 +110,17 @@ class RecorderDialog(wx.Dialog):
         dateBox.Add(dpc, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
         
-        spin2 = wx.SpinButton( self, -1, style=wx.SP_VERTICAL )
-        time24 = masked.TimeCtrl(
+        self.timeSpin = wx.SpinButton( self, -1, style=wx.SP_VERTICAL )
+        self.time24 = masked.TimeCtrl(
                         self, -1, name="24 hour control", fmt24hr=True,
-                        spinButton = spin2
+                        spinButton = self.timeSpin
                         )
                         
         hourLabel = wx.StaticText(self, -1, "Ora inizio : ")
         hourLabel.SetHelpText("Help")
         dateBox.Add(hourLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)                
-        dateBox.Add(time24, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        dateBox.Add(spin2, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        dateBox.Add(self.time24, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        dateBox.Add(self.timeSpin, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         
         
         
@@ -132,16 +132,20 @@ class RecorderDialog(wx.Dialog):
         
         
      
-        slider = wx.Slider(
+        self.slider = wx.Slider(
             self, -1, 30, 1, 180, (10, 10), (160, -1), 
-             wx.SL_LABELS | wx.SL_TOP | wx.SL_HORIZONTAL | wx.SL_AUTOTICKS
+             wx.SL_LABELS | wx.SL_TOP | wx.SL_HORIZONTAL | wx.SL_AUTOTICKS 
             )
 
-        slider.SetTickFreq(1, 1)
+        self.slider.SetTickFreq(1, 1)
+        
+        
+        self.Bind(wx.EVT_SLIDER, self.sliderUpdate)
+
         
         #durationBox.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
-        durationGridSizer.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        durationGridSizer.Add(self.slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
         
         
@@ -152,10 +156,10 @@ class RecorderDialog(wx.Dialog):
         endLabel.SetHelpText("Help")
         durationBox.Add(endLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
         
-        endTimeLabel = wx.StaticText(self, -1, "00:00:00")
-        endTimeLabel.SetHelpText("Help")
-        durationBox.Add(endTimeLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
-        
+        self.endTimeLabel = wx.StaticText(self, -1, "00:00:00")
+        self.endTimeLabel.SetHelpText("Help")
+        durationBox.Add(self.endTimeLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
+         
         durationGridSizer.Add(durationBox, 0, wx.ALIGN_LEFT)
         
         
@@ -167,6 +171,27 @@ class RecorderDialog(wx.Dialog):
         sliderLabel.SetHelpText("Help")
         sliderBox.Add(sliderLabel, 0, wx.ALIGN_CENTER|wx.LEFT, 30)
        
+       
+     # BUTTONS  ----------------------------------
+     
+        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+          
+         
+        btnsizer = wx.StdDialogButtonSizer()
+        
+        if wx.Platform != "__WXMSW__":
+            btn = wx.ContextHelpButton(self)
+            btnsizer.AddButton(btn)
+        
+        btn = wx.Button(self, wx.ID_OK)
+        btn.SetHelpText("The OK button completes the dialog")
+        btn.SetDefault()
+        btnsizer.AddButton(btn)
+
+        btn = wx.Button(self, wx.ID_CANCEL)
+        btn.SetHelpText("The Cancel button cancels the dialog. (Cool, huh?)")
+        btnsizer.AddButton(btn)
+        btnsizer.Realize()
         
         mainSizer.Add(gridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
@@ -176,11 +201,20 @@ class RecorderDialog(wx.Dialog):
         
         mainSizer.Add(sliderBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
+        mainSizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+        mainSizer.Add(btnsizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
         
        
        
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
+        
+    def sliderUpdate(self, event):
+        self.endTimeLabel.SetLabel("00:00:"+str(self.slider.GetValue()))
+
+
+
         
     def GetValues(self):
         result = (self.text1.GetValue() ,self.text2.GetValue() ,self.text3.GetValue())
