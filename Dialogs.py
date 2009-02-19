@@ -128,46 +128,55 @@ class RecorderDialog(wx.Dialog):
         
         durationBox = wx.BoxSizer(wx.HORIZONTAL)
         
-        #durationGridSizer= wx.FlexGridSizer(2,4,3,3)
-        
-        sliderLabel = wx.StaticText(self, -1, "Durata (min) : ")
-        sliderLabel.SetHelpText("Help")
-        durationBox.Add(sliderLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        
-        durationBox.AddSpacer(10,100000)
-       
-        endLabel = wx.StaticText(self, -1, "Ora Termine : ")
-        endLabel.SetHelpText("Help")
-        durationBox.Add(endLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        
-        endTimeLabel = wx.StaticText(self, -1, "00:00:00")
-        endTimeLabel.SetHelpText("Help")
-        durationBox.Add(endTimeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        durationGridSizer= wx.FlexGridSizer(1,2,1,1)
         
         
-     # SLIDER -------------------------------
-     
-        sliderBox = wx.BoxSizer(wx.HORIZONTAL)
      
         slider = wx.Slider(
-            self, -1, 30, 1, 180, (30, 100), (120, -1), 
-             wx.SL_LABELS | wx.SL_BOTTOM | wx.SL_HORIZONTAL | wx.SL_AUTOTICKS
+            self, -1, 30, 1, 180, (10, 10), (160, -1), 
+             wx.SL_LABELS | wx.SL_TOP | wx.SL_HORIZONTAL | wx.SL_AUTOTICKS
             )
 
         slider.SetTickFreq(1, 1)
         
         #durationBox.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
-        sliderBox.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        durationGridSizer.Add(slider, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        
+        
+        
+        #durationBox.AddSpacer(10,100000)
+        durationBox.Add((30, 1))
+       
+        endLabel = wx.StaticText(self, -1, "Ora Termine : ")
+        endLabel.SetHelpText("Help")
+        durationBox.Add(endLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
+        
+        endTimeLabel = wx.StaticText(self, -1, "00:00:00")
+        endTimeLabel.SetHelpText("Help")
+        durationBox.Add(endTimeLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
+        
+        durationGridSizer.Add(durationBox, 0, wx.ALIGN_LEFT)
+        
+        
+     # SLIDER -------------------------------
+     
+        sliderBox = wx.BoxSizer(wx.HORIZONTAL)
+     
+        sliderLabel = wx.StaticText(self, -1, "Durata (min)")
+        sliderLabel.SetHelpText("Help")
+        sliderBox.Add(sliderLabel, 0, wx.ALIGN_CENTER|wx.LEFT, 30)
        
         
         mainSizer.Add(gridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         mainSizer.Add(dateBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
-        mainSizer.Add(durationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(durationGridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         mainSizer.Add(sliderBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
+        
        
        
         self.SetSizer(mainSizer)
