@@ -10,16 +10,6 @@ STRING_WAITING='In lavorazione'
 STRING_AVAILABLE='Disponibile'
 STRING_DOWNLOADED='Scaricato'
 
-recordings_future = {
-0 : (STRING_DOWNLOADED, '1AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
-1 : (STRING_WAITING, '2Hit List','RadioDJ', '13/02/2009 15:00','01:15','mp3','Radio'),
-2 : (STRING_DOWNLOADED, '3Hit List','Virgin Radio', '13/02/2009 14:00','01:00','mp3','Radio'),
-3 : (STRING_WAITING, '4AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
-4 : (STRING_WAITING, '5AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
-5 : (STRING_AVAILABLE, '6AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
-6 : (STRING_DOWNLOADED, '7AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV')
-}
-
 # Sortable and auto-resizable list, multiple inheritance used
 class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,
         ListCtrlAutoWidthMixin):
@@ -30,7 +20,6 @@ class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,
         self.SetSingleStyle(wx.LC_HRULES, True)
         ColumnSorterMixin.__init__(self, 6)
         ListCtrlAutoWidthMixin.__init__(self)
-        self.itemDataMap = recordings_future
 
     def GetListCtrl(self):
         return self
@@ -50,14 +39,12 @@ class RecorderPanel(wx.Panel):
         self.header = wx.StaticText(self, -1, 'Registrazioni Programmate',
                 style=wx.ALIGN_CENTER)
 
-        #self.header.Centre()
         panelSizer.Add(self.header,0,wx.EXPAND|wx.ALIGN_CENTER)
 
         self.header.Fit()
-        #header.Center()
         self.header.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
-        #panelSizer.Add(header,0,wx.EXPAND)
-
+        panelSizer.Add(self.header,0,wx.EXPAND)
+        panelSizer.Add((-1, 4))
         
         # Crea la lista e aggiungi le colonne
         widthCol = 90
@@ -71,7 +58,6 @@ class RecorderPanel(wx.Panel):
 
         panelSizer.Add(self.list, 1, wx.EXPAND)
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
-#        self.SetBackgroundColour(wx.WHITE)
 
         self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
 
@@ -111,9 +97,6 @@ class RecorderPanel(wx.Panel):
         self.list.SetStringItem(index, 3, data.rec_time)
         self.list.SetStringItem(index, 4, data.format)
         self.list.SetStringItem(index, 5, data.channel_type)
-
-        #self.list.SetStringItem(index, 6, data[6])
-        #self.list.SetStringItem(index, 7, data[7])
         self.list.SetItemData(index, key)
     
     # Aggiorna il dizionario (necessario per coerenza sulla chiave)
@@ -160,7 +143,9 @@ class CompletedPanel(wx.Panel):
         header = wx.StaticText(self, -1, 'Registrazioni Completate',
                 style=wx.ALIGN_CENTER)
         header.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
+        vbox.Add((-1, 10))
         vbox.Add(header, 0, wx.EXPAND)
+        vbox.Add((-1, 4))
         
         # Crea l'oggetto CheckListCtrl e le relative colonne
         widthCol=90
@@ -175,10 +160,6 @@ class CompletedPanel(wx.Panel):
 
         # Aggiunta della lista
         vbox.Add(self.list, 1, wx.EXPAND | wx.TOP)
-        
-#        self.SetBackgroundColour(wx.LIGHT_GREY)
-#        self.list.SetBackgroundColour(wx.WHITE)
-        #vbox.Add((-1, 10))
         
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
@@ -224,6 +205,8 @@ class CompletedPanel(wx.Panel):
         if data.url != None:
             self.list.SetStringItem(index, 6, STRING_AVAILABLE)
             self.avaibleN += 1
+        else:
+            self.list.SetStringItem(index, 6, STRING_WAITING)
         self.list.SetItemData(index, key)
         if False:
             self.SetCompleteColour(index)
