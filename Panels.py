@@ -83,18 +83,15 @@ class RecorderPanel(wx.Panel):
         """Removes from the list old recordings"""
         num = self.list.GetItemCount()
         colsN = self.list.GetColumnCount()
-        old = []
-        for i in range(num):
+        for i in reverse(range(num)):
             from_time_s = self.list.GetItem(i,2).GetText()
             from_time = datetime.strptime(from_time_s, "%Y-%m-%d %H:%M:%S")
             now = datetime.now()
             if from_time < now:
-                old.append(i)
-        oldItems = []
-        for i in sorted(old, reverse=True):
-            k = self.panel.comPanel.list.InsertItem(self.list.GetItem(i,0))
-            for j in range(1,colsN):
-                self.panel.comPanel.list.SetItem(self.list.GetItem(k,j))
+                k = self.panel.comPanel.list.InsertItem(
+                        self.list.GetItem(i,0))
+                for j in range(1,colsN):
+                    self.panel.comPanel.list.SetItem(self.list.GetItem(k,j))
             self.list.DeleteItem(i)
         
     # Inserisci un nuovo valore nella lista   
