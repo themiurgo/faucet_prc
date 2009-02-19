@@ -359,3 +359,5 @@ class SettingsDialog(wx.Dialog):
                     'Errore di login', wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
+            
+

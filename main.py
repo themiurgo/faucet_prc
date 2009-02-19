@@ -43,8 +43,11 @@ class MainMenuBar(wx.MenuBar):
 
         frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
+        frame.Bind(wx.EVT_MENU, frame.OnAboutBox, id=wx.ID_ABOUT)
         frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
+        
+    
 
 class MainStatusBar(wx.StatusBar):
     def __init__(self, parent):
@@ -173,6 +176,23 @@ class faucetPRCFrame(wx.Frame):
 
     def OnMenuExit(self,event):
         self.Close(True)
+        
+    def OnAboutBox(self, event):
+        info = wx.AboutDialogInfo()
+
+     #   info.SetIcon(wx.Icon('icons/hunter.png', wx.BITMAP_TYPE_PNG))
+        info.SetName('File Hunter')
+        info.SetVersion('1.0')
+        info.SetDescription("ciao")
+        info.SetCopyright('(C) 2007 jan bodnar')
+        info.SetWebSite('http://www.zetcode.com')
+        info.SetLicence("eccoci")
+        info.AddDeveloper('jan bodnar')
+        info.AddDocWriter('jan bodnar')
+        info.AddArtist('The Tango crew')
+	#info.AddTranslator('jan bodnar')
+
+        wx.AboutBox(info)
 
     # Chiudi la finestra + Finestra di conferma
     def onCloseWindow(self,e):

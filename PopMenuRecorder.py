@@ -33,6 +33,8 @@ class PopMenuRecorder(wx.Menu):
         self.Append(wx.ID_REFRESH,
                 "&Aggiorna")
         
+        self.AppendSeparator()
+        
         item2 = wx.MenuItem(self,wx.NewId(),
                 "&Minimizza",
                 "Minimizza la finestra")
@@ -44,6 +46,7 @@ class PopMenuRecorder(wx.Menu):
        
         self.Bind(wx.EVT_MENU, self.OnMinimize, item2)
         
+        self.AppendSeparator()
         
         self.Append(wx.ID_EXIT,
                 "&Esci")
