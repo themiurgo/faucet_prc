@@ -1,5 +1,6 @@
 import pickle
 import json
+import simplejson
 import signal
 from datetime import datetime, timedelta
 
@@ -126,7 +127,7 @@ class Account(object):
         print c
         if c['body'] == 'Access Denied':
             raise Exception('Wrong credentials')
-        self.id_usr = json.loads(c['body'])['id_usr']
+        self.id_usr = simplejson.loads(c['body'])['id_usr']
 
     def get_channels(self):
         """Return channels.
@@ -139,7 +140,7 @@ class Account(object):
         """
         try:
             reply = self.connection.request_get('/channels')
-            return json.loads(reply['body'])
+            return simplejson.loads(reply['body'])
         except:
             print reply
 
@@ -164,7 +165,7 @@ class Account(object):
         """
         try:
             reply =  self.connection.request_get('/recordings')
-            return json.loads(reply['body'])
+            return simplejson.loads(reply['body'])
         except:
             print reply
 
