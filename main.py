@@ -221,7 +221,7 @@ class MainPanel(wx.Panel):
         mainSizer.Add(splitter, 1, wx.EXPAND) #Aggiunge lo splitter
         
         # Recording panels
-        self.comPanel = CompletedPanel(splitter, -1,self,self.parent)
+        self.comPanel = CompletedPanel(splitter, -1, self, self.parent)
         self.recPanel = RecorderPanel(splitter, -1, self,self.parent)
         
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
@@ -261,7 +261,14 @@ class MainPanel(wx.Panel):
         recDialog.Destroy()
 
     def OnRefresh(self, event):
-        vcast.i.get_recordings()
+        try:
+            recs = vcast.i.get_recordings()
+            self.recPanel.Clear()
+            self.comPanel.Clear()
+            self.recPanel.Populate(recs)
+            self.recPanel.TransferOld()
+        except:
+            print "Error"
 
 #---------------------------------------------------------------------------
 

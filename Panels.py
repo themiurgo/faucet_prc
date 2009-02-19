@@ -4,16 +4,11 @@ import PopMenuRecorder
 from wx.lib.mixins.listctrl import CheckListCtrlMixin,ListCtrlAutoWidthMixin,ColumnSorterMixin
 import PopMenuCompleted
 import vcast
+from datetime import datetime, timedelta
 
 STRING_WAITING='Disponibile'
 STRING_AVAILABLE='In Attesa'
 STRING_DOWNLOADED='Scaricato'
-
-# Dizionario pre-caricato per le prove
-#recordings_past = {
-#0 : ('Presa Diretta', 'Rai3', '15/02/2009 21:20','02:15','DivX','TV'),
-#1 : ('Viva Radio 2', 'Radio2', '16/02/2009 13:30','00:30','iPod','Radio')
-#}
 
 recordings_future = {
 0 : (STRING_DOWNLOADED, '1AnnoZero','Rai3', '08/02/2009 22:00','02:30','DivX','TV'),
@@ -60,7 +55,7 @@ class RecorderPanel(wx.Panel):
         self.list = SortedListCtrl(self)
         self.list.InsertColumn(0, 'Titolo', width=140)
         self.list.InsertColumn(1, 'Canale', width=widthCol)
-        self.list.InsertColumn(2, 'Data', width=widthCol)
+        self.list.InsertColumn(2, 'Data', width=2*widthCol)
         self.list.InsertColumn(3, 'Durata', width=widthCol)
         self.list.InsertColumn(4, 'Formato', width=widthCol)
         self.list.InsertColumn(5, 'Tipo', width=widthCol)
@@ -70,9 +65,12 @@ class RecorderPanel(wx.Panel):
         self.SetBackgroundColour(wx.WHITE)
         self.Populate(vcast.i.get_recordings())
 
-        self.timer = wx.PyTimer(self.Refresh)
+        self.timer = wx.PyTimer(self.TransferOld)
         self.timer.Start(30000)
-        self.Refresh()
+        self.TransferOld()
+
+    def Clear(self):
+        self.list.DeleteAllItems()
 
     def Populate(self, values):
         # Vanno filtrati (futuri e passati) #TODO
@@ -81,9 +79,23 @@ class RecorderPanel(wx.Panel):
         for key, data in values.iteritems():
             self.InsertValue(key,data)
 
-    def Refresh(self):
+    def TransferOld(self):
         """Removes from the list old recordings"""
-        pass
+        num = self.list.GetItemCount()
+        colsN = self.list.GetColumnCount()
+        old = []
+        for i in range(num):
+            from_time_s = self.list.GetItem(i,2).GetText()
+            from_time = datetime.strptime(from_time_s, "%Y-%m-%d %H:%M:%S")
+            now = datetime.now()
+            if from_time < now:
+                old.append(i)
+        oldItems = []
+        for i in sorted(old, reverse=True):
+            k = self.panel.comPanel.list.InsertItem(self.list.GetItem(i,0))
+            for j in range(1,colsN):
+                self.panel.comPanel.list.SetItem(self.list.GetItem(k,j))
+            self.list.DeleteItem(i)
         
     # Inserisci un nuovo valore nella lista   
     def InsertValue(self,key,data):
@@ -138,14 +150,13 @@ class CompletedPanel(wx.Panel):
         # Crea l'oggetto CheckListCtrl e le relative colonne
         widthCol=90
         self.list = CheckListCtrl(self)
-        self.list.InsertColumn(0, 'Stato', width=120)
-        self.list.InsertColumn(1, 'Titolo', width=140)
-        self.list.InsertColumn(2, 'Canale', width=widthCol)
-        self.list.InsertColumn(3, 'Data', width=2*widthCol)
-        #self.list.InsertColumn(4, 'Inizio', width=widthCol)
-        self.list.InsertColumn(4, 'Durata', width=widthCol)
-        self.list.InsertColumn(5, 'Formato', width=widthCol)
-        self.list.InsertColumn(6, 'Tipo', width=widthCol)
+        self.list.InsertColumn(0, 'Titolo', width=140)
+        self.list.InsertColumn(1, 'Canale', width=widthCol)
+        self.list.InsertColumn(2, 'Data', width=2*widthCol)
+        self.list.InsertColumn(3, 'Durata', width=widthCol)
+        self.list.InsertColumn(4, 'Formato', width=widthCol)
+        self.list.InsertColumn(5, 'Tipo', width=widthCol)
+        self.list.InsertColumn(6, 'Stato', width=120)
 
         # Aggiunta della lista
         vbox.Add(self.list, 1, wx.EXPAND | wx.TOP)
@@ -171,6 +182,9 @@ class CompletedPanel(wx.Panel):
         self.items = recordings_future.items()
         for key, data in self.items:
             self.InsertValue(key,data)
+
+    def Clear(self):
+        self.list.DeleteAllItems()
 
     # Contextual menu (right-click in the list)
     def OnRightDown(self,event):

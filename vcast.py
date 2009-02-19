@@ -70,8 +70,8 @@ class Interface(object):
         """
         # self.loadFile()
         print "Retrieving recordings..."
-        recs = self.account.get_recordings()
         try:
+            recs = self.account.get_recordings()
             print recs
         except:
             print 'No internet connection or server unreachable'
