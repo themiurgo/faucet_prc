@@ -26,7 +26,8 @@ class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,
 
     def __init__(self, parent):
         wx.ListCtrl.__init__(self, parent, -1,
-                style=wx.LC_REPORT | wx.SUNKEN_BORDER)
+                style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_SINGLE_SEL)
+        self.SetSingleStyle(wx.LC_HRULES, True)
         ColumnSorterMixin.__init__(self, 6)
         ListCtrlAutoWidthMixin.__init__(self)
         self.itemDataMap = recordings_future
@@ -160,6 +161,7 @@ class CompletedPanel(wx.Panel):
         # Crea e aggiungi l'intestazione
         header = wx.StaticText(self, -1, 'Registrazioni Completate',
                 style=wx.ALIGN_CENTER)
+        header.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD))
         vbox.Add(header, 0, wx.EXPAND)
         
         # Crea l'oggetto CheckListCtrl e le relative colonne

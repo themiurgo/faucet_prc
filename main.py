@@ -9,8 +9,6 @@ import webbrowser
 
 ID_INFO = 101
 ID_ABOUT = 105
-ID_EXIT = 110
-ID_ACCOUNT = 120
 ID_CHANNELS = 121
 
 # Provides contextual help in the program
@@ -19,56 +17,31 @@ wx.HelpProvider.Set(provider)
 
 class MainMenuBar(wx.MenuBar):
     def __init__(self, frame):
+        ap = wx.ArtProvider()
         wx.MenuBar.__init__(self)
 
         # Menu (I livello)
-        filemenu = wx.Menu()
-        impostazioni = wx.Menu()
-        about = wx.Menu()
+        reg = wx.Menu()
+        help = wx.Menu()
+        self.Append(reg, "R&egistrazioni")
+        self.Append(help, "&?")
 
-        # Sottomenu FILE
-        item = wx.MenuItem(filemenu,ID_INFO,
-                "&Informazioni\tCTRL+I",
-                "Informazioni sull'applicazione")
-        iconPath ="./img/info.ico"
-        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
-        item.SetBitmap(wx.BitmapFromImage(icon)) 
-        filemenu.AppendItem(item)
-        filemenu.AppendSeparator()
-        
-        item = wx.MenuItem(filemenu,ID_EXIT,
-                "&Esci\tCTRL+Q",
-                "Esci dall'applicazione")
-        iconPath ="./img/exit.ico"
-        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
-        item.SetBitmap(wx.BitmapFromImage(icon)) 
-        filemenu.AppendItem(item)
-        #filemenu.Append()
-        self.Append(filemenu, "&File")
-
-        # Sottomenu IMPOSTAZIONI
-        self.Append(impostazioni, "&Impostazioni")
-        
-        item = wx.MenuItem(impostazioni,ID_ACCOUNT,
-                "&Account\tCTRL+A",
-                "Imposta le credenziali dell'account Vcast")
-        iconPath ="./img/userinfo.ico"
-        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
-        item.SetBitmap(wx.BitmapFromImage(icon)) 
-        impostazioni.AppendItem(item)
+        # Menu Registrazioni
+        reg.Append(wx.ID_ADD, "Aggiungi",
+            "Aggiungi una nuova registrazione")
+        reg.Append(wx.ID_REFRESH, "Aggiorna",
+                "Aggiorna la lita delle registrazioni")
+        reg.Append(wx.ID_PREFERENCES, "Account",
+            "Imposta le credenziali dell'account Vcast")
+        reg.AppendSeparator()
+        reg.Append(wx.ID_EXIT, "&Esci\tCTRL+Q")
        
-        
-        impostazioni.Append(ID_CHANNELS,
-                "&Canali\tCTRL+H",
-                "Imposta le preferenze sui canali")
-        
-        # Sottomenu ABOUT
-        self.Append(about, "&?")
-        about.Append(ID_ABOUT,
-                "A&bout\tCTRL+B",
-                "Informazioni su Faucet PRC")
+        # Menu HELP
+        help.Append(wx.ID_ABOUT, "&About",
+            "Informazioni su Faucet PRC")
 
-        frame.Bind(wx.EVT_MENU, frame.Settings, id=ID_ACCOUNT)
+        frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
+        frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
 
 class MainStatusBar(wx.StatusBar):
     def __init__(self, parent):
@@ -121,7 +94,6 @@ class faucetPRCFrame(wx.Frame):
         icon = wx.Icon(iconPath, wx.BITMAP_TYPE_ICO)
         self.SetIcon(icon)
 
-        self.Bind(wx.EVT_MENU, self.onMenuExit, id=ID_EXIT)
         self.Bind(wx.EVT_CLOSE, self.onCloseWindow)
 
         self.Centre()
@@ -174,7 +146,7 @@ class faucetPRCFrame(wx.Frame):
     def OnCombo(self, event):
         self.log.WriteText("combobox item selected: %s\n" % event.GetString())
 
-    def onMenuExit(self,event):
+    def OnMenuExit(self,event):
         self.Close(True)
 
     # Chiudi la finestra + Finestra di conferma

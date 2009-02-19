@@ -144,7 +144,6 @@ class Account(object):
         self.connection.add_rest_credentials(username, password)
         
         c = self.connection.request_get('/faucetid')
-        print c
         if c['body'] == 'Access Denied':
             raise Exception('Wrong credentials')
         self.id_usr = simplejson.loads(c['body'])['id_usr']
@@ -196,7 +195,6 @@ class Account(object):
         f = feedparser.parse(feed)
         urls = []
         for i in f.entries:
-            print i
             # print i['enclosures'][0]['href']
             urls.append(i['enclosures'][0]['href'])
         return urls
