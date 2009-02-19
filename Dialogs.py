@@ -17,14 +17,79 @@ class RecorderDialog(wx.Dialog):
             style=wx.DEFAULT_DIALOG_STYLE):
         wx.Dialog.__init__(self, parent, -1,title="Creazione Nuova Registrazione")
         
-        mainSizer = wx.GridBagSizer(4,4)
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        
+    
+    # HEADER -------------------------
+        
+        header = wx.StaticText(self, -1, "Inserisci tutti i campi per creare\n la nuova registrazione",style=wx.ALIGN_CENTRE)
+        header.SetHelpText("Per modificare i canali visualizzati vai su preferenze")
+        mainSizer.Add(header, 0, wx.ALIGN_CENTRE)
+
+    
+    # TITLE -------------------------
+        
+        titleBox = wx.BoxSizer(wx.HORIZONTAL)
+
+        title = wx.StaticText(self, -1, "Titolo")
+        title.SetHelpText("Nome del programma che vuoi registrare")
+        titleBox.Add(title, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        titleText = wx.TextCtrl(self, -1, "", size=(80,-1))
+        titleText.SetHelpText("Nome del programma che vuoi registrare")
+        titleBox.Add(titleText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        #self.text1 = text       
+        
+        mainSizer.Add(titleBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
+        
+    
+    # TYPE STATION FORMAT -------------------------
+        
+        typeBox = wx.BoxSizer(wx.HORIZONTAL)
+        
+        stationLabel = wx.StaticText(self, -1, "Emittente:")
+        stationLabel.SetHelpText("Radio o televisiva")
+        
+        stationCB = stationComboBox(self)
+        stationCB.SetHelpText("Here's some help text for field #3")
+        
+            
+        formatLabel = wx.StaticText(self, -1, "Formato di compressione:")
+        formatLabel.SetHelpText("Help")
+        
+        formatCB = formatComboBox(self)
+        formatCB.SetHelpText("Here's some help text for field #3")
+        
+        
+        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
+        typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
+        typeBox.Add(typeLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        typeCB = typeComboBox(self,stationCB,formatCB)
+        typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
+        typeBox.Add(typeCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+ 
+        
+        #secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        #secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        stationBox = wx.BoxSizer(wx.HORIZONTAL)
+        stationBox.Add(stationLabel, 0, wx.ALIGN_CENTRE)
+        stationBox.Add(stationCB, 0, wx.ALIGN_CENTRE)
+        
+
+        formatBox = wx.BoxSizer(wx.HORIZONTAL)
+        formatBox.Add(formatLabel, 0, wx.ALIGN_CENTRE)
+        formatBox.Add(formatCB, 0, wx.ALIGN_CENTRE)
+        
+        
+        mainSizer.Add(typeBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(stationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(formatBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        
         self.SetSizer(mainSizer)
-        #mainSizer.Fit(self)
-        
-        self.header = wx.StaticText(self, -1, "Inserisci tutti i campi per creare\n la nuova registrazione",style=wx.ALIGN_CENTRE)
-        #header.SetHelpText("Per modificare i canali visualizzatti vai su preferenze")
-        
-        #mainSizer.Add(self.header, (0,0), (0,4))
+        mainSizer.Fit(self)
         
     def GetValues(self):
         result = (self.text1.GetValue() ,self.text2.GetValue() ,self.text3.GetValue())
