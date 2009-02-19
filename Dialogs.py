@@ -19,6 +19,8 @@ class RecorderDialog(wx.Dialog):
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         
+        gridSizer= wx.FlexGridSizer(4,2,3,3)
+        
     
     # HEADER -------------------------
         
@@ -33,14 +35,14 @@ class RecorderDialog(wx.Dialog):
 
         title = wx.StaticText(self, -1, "Titolo")
         title.SetHelpText("Nome del programma che vuoi registrare")
-        titleBox.Add(title, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        gridSizer.Add(title, 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
-        titleText = wx.TextCtrl(self, -1, "", size=(80,-1))
+        titleText = wx.TextCtrl(self, -1)
         titleText.SetHelpText("Nome del programma che vuoi registrare")
-        titleBox.Add(titleText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        gridSizer.Add(titleText, 0, wx.ALIGN_LEFT|wx.ALL|wx.GROW, 5)
         #self.text1 = text       
         
-        mainSizer.Add(titleBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        #mainSizer.Add(titleBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         
     
@@ -64,29 +66,29 @@ class RecorderDialog(wx.Dialog):
         
         typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
         typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
-        typeBox.Add(typeLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        gridSizer.Add(typeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
         typeCB = typeComboBox(self,stationCB,formatCB)
         typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
-        typeBox.Add(typeCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        gridSizer.Add(typeCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
  
         
         #secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         #secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         
         stationBox = wx.BoxSizer(wx.HORIZONTAL)
-        stationBox.Add(stationLabel, 0, wx.ALIGN_CENTRE)
-        stationBox.Add(stationCB, 0, wx.ALIGN_CENTRE)
+        gridSizer.Add(stationLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        gridSizer.Add(stationCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
 
         formatBox = wx.BoxSizer(wx.HORIZONTAL)
-        formatBox.Add(formatLabel, 0, wx.ALIGN_CENTRE)
-        formatBox.Add(formatCB, 0, wx.ALIGN_CENTRE)
+        gridSizer.Add(formatLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        gridSizer.Add(formatCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
         
-        mainSizer.Add(typeBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        mainSizer.Add(stationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        mainSizer.Add(formatBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        mainSizer.Add(gridSizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        #mainSizer.Add(stationBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        #mainSizer.Add(formatBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
