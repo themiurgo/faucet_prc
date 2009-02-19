@@ -94,7 +94,7 @@ class RecorderPanel(wx.Panel):
                         self.list.GetItem(i,0))
                 for j in range(1,colsN):
                     self.panel.comPanel.list.SetStringItem(k, j,
-                            self.list.GetItem(i,2).GetText())
+                            self.list.GetItem(i,j).GetText())
                 self.list.DeleteItem(i)
         
     # Inserisci un nuovo valore nella lista   
