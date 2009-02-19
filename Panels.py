@@ -6,8 +6,8 @@ import PopMenuCompleted
 import vcast
 from datetime import datetime, timedelta
 
-STRING_WAITING='Disponibile'
-STRING_AVAILABLE='In Attesa'
+STRING_WAITING='In lavorazione'
+STRING_AVAILABLE='Disponibile'
 STRING_DOWNLOADED='Scaricato'
 
 recordings_future = {
@@ -63,11 +63,9 @@ class RecorderPanel(wx.Panel):
         panelSizer.Add(self.list, 1, wx.EXPAND)
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.SetBackgroundColour(wx.WHITE)
-        self.Populate(vcast.i.get_recordings())
 
         self.timer = wx.PyTimer(self.TransferOld)
         self.timer.Start(30000)
-        self.TransferOld()
 
     def Clear(self):
         self.list.DeleteAllItems()
@@ -105,6 +103,7 @@ class RecorderPanel(wx.Panel):
         self.list.SetStringItem(index, 3, data.rec_time)
         self.list.SetStringItem(index, 4, data.format)
         self.list.SetStringItem(index, 5, data.channel_type)
+
         #self.list.SetStringItem(index, 6, data[6])
         #self.list.SetStringItem(index, 7, data[7])
         self.list.SetItemData(index, key)
@@ -144,7 +143,8 @@ class CompletedPanel(wx.Panel):
         self.SetSizer(vbox)
         
         # Crea e aggiungi l'intestazione
-        header = wx.StaticText(self, -1, 'Registrazioni Completate',style=wx.ALIGN_CENTER)
+        header = wx.StaticText(self, -1, 'Registrazioni Completate',
+                style=wx.ALIGN_CENTER)
         vbox.Add(header, 0, wx.EXPAND)
         
         # Crea l'oggetto CheckListCtrl e le relative colonne
@@ -166,20 +166,21 @@ class CompletedPanel(wx.Panel):
         #vbox.Add((-1, 10))
         
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+        self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
 
         # Aggiunta della lista
         #vbox.Add(self.list, 1, wx.EXPAND)
         
 #        self.Populate()
 
-    def Populate(self):
+    def Populate(self, values):
         #for i in packages:
          #   index = self.list.InsertStringItem(sys.maxint, i[0])
           #  self.list.SetStringItem(index, 1, i[1])
            # self.list.SetStringItem(index, 2, i[2])
            
         # Routine per il popolamento delle colonne
-        self.items = recordings_future.items()
+        self.items = values.iteritems()
         for key, data in self.items:
             self.InsertValue(key,data)
 
@@ -192,16 +193,16 @@ class CompletedPanel(wx.Panel):
             self.frame), event.GetPosition())
         
     def InsertValue(self,key,data):
-        index = self.list.InsertStringItem(sys.maxint, data[0])
-        self.list.SetStringItem(index, 1, data[1])
-        self.list.SetStringItem(index, 2, data[2])
-        self.list.SetStringItem(index, 3, data[3])
-        self.list.SetStringItem(index, 4, data[4])
-        self.list.SetStringItem(index, 5, data[5])
-        self.list.SetStringItem(index, 6, data[6])
-        #self.list.SetStringItem(index, 7, data[7])
+        index = self.list.InsertStringItem(sys.maxint, data.title)
+        self.list.SetStringItem(index, 1, data.channel)
+        self.list.SetStringItem(index, 2, data.from_time)
+        self.list.SetStringItem(index, 3, data.rec_time)
+        self.list.SetStringItem(index, 4, data.format)
+        self.list.SetStringItem(index, 5, data.channel_type)
+        if data.url != None:
+            self.list.SetStringItem(index, 6, STRING_AVAILABLE)
         self.list.SetItemData(index, key)
-        if data[0] == STRING_DOWNLOADED:
+        if False:
             self.SetCompleteColour(index)
     
     def SetCompleteColour(self,index):
@@ -228,7 +229,6 @@ class CompletedPanel(wx.Panel):
                 count+=1; 
                 del recordings_past[itemData]
 
-
     def OnRemoveCompleted(self, event):
         num = self.list.GetItemCount()
         count=0
@@ -249,3 +249,12 @@ class CompletedPanel(wx.Panel):
             #print item
             #if self.list.IsChecked(i):
                 #self.log.AppendText(self.list.GetItemText(i) + '\n')
+
+    def OnItemSelected(self, event):
+        position = self.list.GetFirstSelected() # Position in the ListCtrl
+        id = self.list.GetItemData(position) # Unique ID
+        url = vcast.i.recordings[id].url
+        if url != None:
+            self.panel.saveButton.Enable(True)
+        else:
+            self.panel.saveButton.Enable(False)

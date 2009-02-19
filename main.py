@@ -5,6 +5,7 @@ import time
 from Dialogs import *
 from Panels import *
 import vcast
+import webbrowser
 
 ID_INFO = 101
 ID_ABOUT = 105
@@ -223,6 +224,10 @@ class MainPanel(wx.Panel):
         # Recording panels
         self.comPanel = CompletedPanel(splitter, -1, self, self.parent)
         self.recPanel = RecorderPanel(splitter, -1, self,self.parent)
+
+        vcast.i.get_recordings()
+        self.recPanel.Populate(vcast.i.getFutureRecordings())
+        self.comPanel.Populate(vcast.i.getPastRecordings())
         
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         
@@ -237,10 +242,13 @@ class MainPanel(wx.Panel):
         mainSizer.Add(bottomSizer,0,wx.EXPAND)
         
         #Associa un'azione ai bottoni
-        self.Bind(wx.EVT_BUTTON, self.OnAdd, addButton)
-        self.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveCompleted, clearButton)
-        self.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveSelected, deleteButton)
-        
+        addButton.Bind(wx.EVT_BUTTON, self.OnAdd)
+        clearButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveCompleted)
+        deleteButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveSelected)
+        saveButton.Enable(False)
+        saveButton.Bind(wx.EVT_BUTTON, self.OnSaveAs)
+
+        self.saveButton = saveButton
         
     # Mostra la finestra per aggiungere una Registrazione
     def OnAdd(self, evt):
@@ -269,6 +277,14 @@ class MainPanel(wx.Panel):
             self.recPanel.TransferOld()
         except:
             print "Error"
+
+    def OnSaveAs(self,event):
+        list = self.comPanel.list
+        position = list.GetFirstSelected() # Position in the ListCtrl
+        id = list.GetItemData(position) # Unique ID
+        url = vcast.i.recordings[id].url
+        print id, position, vcast.i.recordings[id].url
+        webbrowser.open(url)
 
 #---------------------------------------------------------------------------
 

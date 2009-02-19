@@ -62,6 +62,24 @@ class Interface(object):
     def get_channels(self):
         return self.account.get_channels()
 
+    def getFutureRecordings(self):
+        r = {}
+        now = datetime.now()
+        for k,v in self.recordings.iteritems():
+            d = datetime.strptime(v.from_time, "%Y-%m-%d %H:%M:%S")
+            if d > now:
+                r[k] = v
+        return r
+
+    def getPastRecordings(self):
+        r = {}
+        now = datetime.now()
+        for k,v in self.recordings.iteritems():
+            d = datetime.strptime(v.from_time, "%Y-%m-%d %H:%M:%S")
+            if d <= now:
+                r[k] = v
+        return r
+
     def get_recordings(self):
         """Download active recordings list and refresh local data
         
@@ -72,7 +90,6 @@ class Interface(object):
         print "Retrieving recordings..."
         try:
             recs = self.account.get_recordings()
-            print recs
         except:
             print 'No internet connection or server unreachable'
             return self.recordings
@@ -85,8 +102,7 @@ class Interface(object):
             self.recordings[id_rec] = Recording(id_rec,
                     i['title'], i['channel'], i['channel_type'],
                     i['from_time'], i['rec_time'],i['format'])
-#         urls = a.get_download_urls()
-        urls = []
+        urls = self.account.get_download_urls()
 
         for i in urls:
             # Take ID from url and assign it to the object
@@ -120,6 +136,8 @@ class Account(object):
         """Set up a REST connection to Vcast Server
         
         Returns id_usr user id or raises exception"""
+        self.username = username
+        self.password = password
 
         url = 'http://www.vcast.it/faucetpvr/api/1.0/server_rest.php'
         self.connection = Connection(url)
@@ -178,6 +196,7 @@ class Account(object):
         f = feedparser.parse(feed)
         urls = []
         for i in f.entries:
+            print i
             # print i['enclosures'][0]['href']
             urls.append(i['enclosures'][0]['href'])
         return urls

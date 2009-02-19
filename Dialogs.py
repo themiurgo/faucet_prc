@@ -153,6 +153,12 @@ class SettingsDialog(wx.Dialog):
         self.SetSizer(sizer)
         sizer.Fit(self)
         self.interface = interface
+        try:
+            account = self.interface.account
+            self.usr.SetValue(account.username)
+            self.psw.SetValue(account.password)
+        except:
+            pass
 
         ok.Bind(wx.EVT_BUTTON, self.updateAccount)
 
