@@ -176,4 +176,3 @@ class SettingsDialog(wx.Dialog):
                     wx.OK | wx.ICON_INFORMATION)
             dlg.ShowModal()
             dlg.Destroy()
-

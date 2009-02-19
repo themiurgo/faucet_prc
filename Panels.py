@@ -64,6 +64,8 @@ class RecorderPanel(wx.Panel):
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.SetBackgroundColour(wx.WHITE)
 
+        self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+
         self.timer = wx.PyTimer(self.TransferOld)
         self.timer.Start(30000)
 
@@ -119,6 +121,10 @@ class RecorderPanel(wx.Panel):
     def OnRightDown(self,event):
         self.PopupMenu(PopMenuRecorder.PopMenuRecorder(self, self.panel,
             self.frame), event.GetPosition())
+
+    def OnItemSelected(self, event):
+        self.panel.comPanel.list.Select(
+                self.panel.comPanel.list.GetFirstSelected(),on=0)
 
 # CheckBox provided and auto resizable list, used multiple inheritance
 class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin,
@@ -251,6 +257,8 @@ class CompletedPanel(wx.Panel):
                 #self.log.AppendText(self.list.GetItemText(i) + '\n')
 
     def OnItemSelected(self, event):
+        self.panel.recPanel.list.Select(
+                self.panel.recPanel.list.GetFirstSelected(),on=0)
         position = self.list.GetFirstSelected() # Position in the ListCtrl
         id = self.list.GetItemData(position) # Unique ID
         url = vcast.i.recordings[id].url
