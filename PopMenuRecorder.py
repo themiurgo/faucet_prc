@@ -34,11 +34,9 @@ class PopMenuRecorder(wx.Menu):
         self.AppendItem(item1)
         
         
-
-       # item1 = wx.MenuItem(self, , ")
-        #self.AppendItem(item1)
         
-        self.Bind(wx.EVT_MENU,  self.panel.OnAdd , item1)
+        self.Append(wx.ID_REFRESH,
+                "&Aggiorna")
         
         item2 = wx.MenuItem(self,wx.NewId(),
                 "&Minimizza",
@@ -48,25 +46,23 @@ class PopMenuRecorder(wx.Menu):
         item2.SetBitmap(wx.BitmapFromImage(icon)) 
         self.AppendItem(item2)
         
-        #item2 = wx.MenuItem(self, wx.NewId(),"")
-        #self.AppendItem(item2)
-        self.Bind(wx.EVT_MENU, self.OnItem2, item2)
+       
+        self.Bind(wx.EVT_MENU, self.OnMinimize, item2)
         
-        item3 = wx.MenuItem(self,wx.NewId(),
-                "&Esci",
-                "Abbandona Faucet PRC")
-        iconPath ="./img/exit.ico"
-        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
-        item3.SetBitmap(wx.BitmapFromImage(icon)) 
-        self.AppendItem(item3)
         
-        self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, item3)
+        self.Append(wx.ID_EXIT,
+                "&Exit")
+        
+        
+       
+        self.Bind(wx.EVT_MENU,  self.parent.OnRemoveCompleted , id=wx.ID_CLEAR)
+        self.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
+        self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, id=wx.ID_EXIT)
 
-    #def OnItem1(self, event):
-       # self.parent.OnAdd 
-
-    def OnItem2(self, event):
+    
+    def OnMinimize(self, event):
         self.frame.Iconize()
+
 
     #def OnItem3(self, event):
      #   self.frame.closeWin

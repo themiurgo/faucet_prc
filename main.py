@@ -16,10 +16,11 @@ provider = wx.SimpleHelpProvider()
 wx.HelpProvider.Set(provider)
 
 class MainMenuBar(wx.MenuBar):
-    def __init__(self, frame):
+    def __init__(self, frame,panel):
         ap = wx.ArtProvider()
         wx.MenuBar.__init__(self)
-
+        
+        self.panel=panel
         # Menu (I livello)
         reg = wx.Menu()
         help = wx.Menu()
@@ -41,6 +42,7 @@ class MainMenuBar(wx.MenuBar):
             "Informazioni su Faucet PRC")
 
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
+        frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
 
 class MainStatusBar(wx.StatusBar):
@@ -79,7 +81,7 @@ class faucetPRCFrame(wx.Frame):
         self.interface = interface
         
         # Main Panel
-        MainPanel(self,id)
+        self.panel = MainPanel(self,id)
         
         #sizer = wx.BoxSizer(wx.VERTICAL)
         #sizer.Add(panel,1,wx.EXPAND)
@@ -87,7 +89,7 @@ class faucetPRCFrame(wx.Frame):
 
         # StatusBar and MenuBar 
         self.SetStatusBar(MainStatusBar(self))
-        self.SetMenuBar(MainMenuBar(self))
+        self.SetMenuBar(MainMenuBar(self,self.panel))
         
         # Icon
         iconPath = "./img/fau_icon.ico"
