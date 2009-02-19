@@ -98,13 +98,14 @@ class MainStatusBar(wx.StatusBar):
 
 # Finestra Principale del Programma
 class faucetPRCFrame(wx.Frame):
-    def __init__(self, parent, id, title):
+    def __init__(self, parent, id, title, interface):
         wx.Frame.__init__(self, parent, id, title, size=(800, 600))
 
         # self.DrawToolbar()
+        self.interface = interface
         
         # Main Panel
-        self.panel = MainPanel(self,id)
+        MainPanel(self,id)
         
         #sizer = wx.BoxSizer(wx.VERTICAL)
         #sizer.Add(panel,1,wx.EXPAND)
@@ -187,22 +188,10 @@ class faucetPRCFrame(wx.Frame):
         confirmDialog.Destroy()
     
     def Settings(self, event):
-        dlg = SettingsDialog(self, -1, "Account", size=(500, 200),
-                         #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
-                         style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX          
-                         )
+        dlg = SettingsDialog(self, -1, "Account", self.interface)
         dlg.CenterOnScreen()
 
-        # this does not return until the dialog is closed.
         val = dlg.Show(True)
-
-        print dlg.GetReturnCode()
-
-#        dlg.Show()
-        #if val == wx.ID_OK:
-        #else:
-        #dlg.Destroy()
-
 
 # Main Panel
 class MainPanel(wx.Panel):
@@ -214,9 +203,16 @@ class MainPanel(wx.Panel):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(mainSizer)
         
-        # Crea il bottone per aggiungere un nuovo programma da registrare
+        # Upper Buttons
+        upSizer = wx.BoxSizer(wx.HORIZONTAL)
         addButton = wx.Button(self, wx.ID_ADD)
-        mainSizer.Add(addButton)
+        refreshButton = wx.Button(self, wx.ID_REFRESH)
+        deleteButton = wx.Button(self, wx.ID_REMOVE)
+        upSizer.Add(addButton)
+        upSizer.Add(refreshButton)
+        upSizer.Add(deleteButton)
+        mainSizer.Add(upSizer)
+        refreshButton.Bind(wx.EVT_BUTTON, self.OnRefresh)
         
         #Crea lo splitter, che contiene i due pannelli ridimensionabili
         splitter = wx.SplitterWindow(self,style=wx.SP_LIVE_UPDATE)
@@ -224,11 +220,9 @@ class MainPanel(wx.Panel):
         self.splitter = splitter
         mainSizer.Add(splitter, 1, wx.EXPAND) #Aggiunge lo splitter
         
-        # Aggiungi (in alto) il pannello delle Registrazioni da completare      
-        self.recPanel = RecorderPanel(splitter, -1, self,self.parent)
-        
-        # Aggiungi (in basso) il pannello delle Registrazioni completate      
+        # Recording panels
         self.comPanel = CompletedPanel(splitter, -1,self,self.parent)
+        self.recPanel = RecorderPanel(splitter, -1, self,self.parent)
         
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         
@@ -236,7 +230,7 @@ class MainPanel(wx.Panel):
         bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
         deleteButton = wx.Button(self, wx.ID_DELETE)
         clearButton = wx.Button(self, wx.ID_CLEAR)
-        saveButton = wx.Button(self, wx.ID_SAVE)
+        saveButton = wx.Button(self, wx.ID_SAVEAS)
         bottomSizer.Add(deleteButton,0,wx.EXPAND)
         bottomSizer.Add(clearButton,0,wx.EXPAND)
         bottomSizer.Add(saveButton,0,wx.EXPAND)
@@ -266,6 +260,9 @@ class MainPanel(wx.Panel):
         #else:
         recDialog.Destroy()
 
+    def OnRefresh(self, event):
+        vcast.i.get_recordings()
+
 #---------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -279,15 +276,16 @@ if __name__ == '__main__':
         vcast.i.setAccount('4nT0','eyeswideshut')
     except:
         raise "Wrong credentials"
+        # Visualizza il dialogo delle impostazioni
         sys.exit(1)
     
     # First, try to load recordings and account informations
     # If no preferences, launch Wizard
     try:
-        vcast.i.load()
+        vcast.i.loadFile()
     except:
         print "Wizard"
         # Set username and password
 
-    faucetPRCFrame(None, wx.ID_ANY, 'Faucet PRC')
+    faucetPRCFrame(None, wx.ID_ANY, 'Faucet PRC',vcast.i)
     app.MainLoop()

@@ -35,10 +35,11 @@ class Interface(object):
         if not username or not password:
             raise
         try:
+            print "Setting account"
             self.account = Account(username, password)
             self.recordings = {}
         except:
-            print 'No connection or wrong credentials'
+            raise
 
     def saveFile(self):
         d = {}
@@ -68,6 +69,7 @@ class Interface(object):
         them has a download link.
         """
         # self.loadFile()
+        print "Retrieving recordings..."
         recs = self.account.get_recordings()
         try:
             print recs

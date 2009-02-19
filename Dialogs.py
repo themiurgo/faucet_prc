@@ -25,10 +25,6 @@ class RecorderDialog(wx.Dialog):
         #header.SetHelpText("Per modificare i canali visualizzatti vai su preferenze")
         
         #mainSizer.Add(self.header, (0,0), (0,4))
-
-   
-
-        
         
     def GetValues(self):
         result = (self.text1.GetValue() ,self.text2.GetValue() ,self.text3.GetValue())
@@ -98,13 +94,10 @@ class formatComboBox(wx.ComboBox):
       
 
 class SettingsDialog(wx.Dialog):
-    def __init__(
-            self, parent, ID, title, size=wx.DefaultSize, pos=wx.DefaultPosition, 
-            style=wx.DEFAULT_DIALOG_STYLE):
-        wx.Dialog.__init__(self, parent, -1,title="Impostazioni dell'account")
-        
-      
-        
+    def __init__(self, parent, ID, title, interface):
+        wx.Dialog.__init__(self, parent, wx.ID_ANY,
+                title="Impostazioni dell'account")
+
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         label = wx.StaticText(self, -1, "Inserisci Username e Password:")
@@ -117,9 +110,9 @@ class SettingsDialog(wx.Dialog):
         label.SetHelpText("Inserisci il nome utente scelto durante la fase di registrazione al sito vcast")
         box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        text = wx.TextCtrl(self, -1, "", size=(80,-1))
-        text.SetHelpText("Inserisci il nome utente scelto durante la fase di registrazione al sito vcast")
-        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.usr = wx.TextCtrl(self, -1, "", size=(80,-1))
+        self.usr.SetHelpText("Inserisci il nome utente scelto durante la fase di registrazione al sito vcast")
+        box.Add(self.usr, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
@@ -129,9 +122,9 @@ class SettingsDialog(wx.Dialog):
         label.SetHelpText("Inserisci la password scelta durante la fase di registrazione al sito vcast")
         box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        text = wx.TextCtrl(self, -1, "", size=(80,-1),style=wx.TE_PASSWORD)
-        text.SetHelpText("Inserisci la password scelta durante la fase di registrazione al sito vcast")
-        box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.psw = wx.TextCtrl(self, -1, "", size=(80,-1),style=wx.TE_PASSWORD)
+        self.psw.SetHelpText("Inserisci la password scelta durante la fase di registrazione al sito vcast")
+        box.Add(self.psw, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
@@ -144,17 +137,37 @@ class SettingsDialog(wx.Dialog):
             btn = wx.ContextHelpButton(self)
             btnsizer.AddButton(btn)
         
-        btn = wx.Button(self, wx.ID_OK)
-        btn.SetHelpText("Salva i cambiamenti")
-        btn.SetDefault()
-        btnsizer.AddButton(btn)
+        ok = wx.Button(self, wx.ID_OK)
+        ok.SetHelpText("Salva i cambiamenti")
+        ok.SetDefault()
 
-        btn = wx.Button(self, wx.ID_CANCEL)
-        btn.SetHelpText("Annulla i cambiamenti")
-        btnsizer.AddButton(btn)
+        cancel = wx.Button(self, wx.ID_CANCEL)
+        cancel.SetHelpText("Annulla i cambiamenti")
+
+        btnsizer.AddButton(ok)
+        btnsizer.AddButton(cancel)
         btnsizer.Realize()
 
         sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
+        self.interface = interface
+
+        ok.Bind(wx.EVT_BUTTON, self.updateAccount)
+
+    def updateAccount(self, event):
+        username = self.usr.GetValue()
+        password = self.psw.GetValue()
+        
+        try:
+            self.interface.setAccount(username,password)
+            self.Destroy()
+
+        except:
+            dlg = wx.MessageDialog(self, 'Wrong username or password.',
+                    'A Message Box',
+                    wx.OK | wx.ICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+

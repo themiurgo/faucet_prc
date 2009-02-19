@@ -68,18 +68,22 @@ class RecorderPanel(wx.Panel):
         panelSizer.Add(self.list, 1, wx.EXPAND)
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.SetBackgroundColour(wx.WHITE)
-        self.Populate()
+        self.Populate(vcast.i.get_recordings())
 
-    def Populate(self):
-        # Risultato della funzione items() su vecchi dati di esempio
-        # [(1, ('jessica','pomona','1981')]
-        reclist = vcast.i.get_recordings()
+        self.timer = wx.PyTimer(self.Refresh)
+        self.timer.Start(30000)
+        self.Refresh()
+
+    def Populate(self, values):
         # Vanno filtrati (futuri e passati) #TODO
         
         # Popola la lista con dati di esempio    
-        print reclist
-        for key, data in reclist.iteritems():
+        for key, data in values.iteritems():
             self.InsertValue(key,data)
+
+    def Refresh(self):
+        """Removes from the list old recordings"""
+        pass
         
     # Inserisci un nuovo valore nella lista   
     def InsertValue(self,key,data):
@@ -104,7 +108,6 @@ class RecorderPanel(wx.Panel):
     def OnRightDown(self,event):
         self.PopupMenu(PopMenuRecorder.PopMenuRecorder(self, self.panel,
             self.frame), event.GetPosition())
-
 
 # CheckBox provided and auto resizable list, used multiple inheritance
 class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin,
@@ -156,7 +159,7 @@ class CompletedPanel(wx.Panel):
         # Aggiunta della lista
         #vbox.Add(self.list, 1, wx.EXPAND)
         
-        self.Populate()
+#        self.Populate()
 
     def Populate(self):
         #for i in packages:
