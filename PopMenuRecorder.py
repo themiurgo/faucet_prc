@@ -25,13 +25,8 @@ class PopMenuRecorder(wx.Menu):
         self.panel=panel
         self.frame=frame
 
-        item1 = wx.MenuItem(self,wx.NewId(),
-                "&Nuova Registrazione",
-                "Elimina i download completati")
-        iconPath ="./img/add.ico"
-        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
-        item1.SetBitmap(wx.BitmapFromImage(icon)) 
-        self.AppendItem(item1)
+        self.Append(wx.ID_ADD,
+                "A&ggiungi")
         
         
         
@@ -51,11 +46,11 @@ class PopMenuRecorder(wx.Menu):
         
         
         self.Append(wx.ID_EXIT,
-                "&Exit")
+                "&Esci")
         
         
        
-        self.Bind(wx.EVT_MENU,  self.parent.OnRemoveCompleted , id=wx.ID_CLEAR)
+        self.Bind(wx.EVT_MENU,  self.panel.OnAdd, id=wx.ID_ADD)
         self.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, id=wx.ID_EXIT)
 

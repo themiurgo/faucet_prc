@@ -47,7 +47,7 @@ class PopMenuCompleted(wx.Menu):
         
         
         self.Append(wx.ID_EXIT,
-                "&Exit")
+                "&Esci")
         
         
        
