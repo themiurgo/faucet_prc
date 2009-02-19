@@ -41,6 +41,7 @@ class MainMenuBar(wx.MenuBar):
         help.Append(wx.ID_ABOUT, "&About",
             "Informazioni su Faucet PRC")
 
+        frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
         frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
@@ -79,17 +80,21 @@ class faucetPRCFrame(wx.Frame):
 
         # self.DrawToolbar()
         self.interface = interface
+
+        self.sb = MainStatusBar(self)
+        self.SetStatusBar(self.sb)
         
         # Main Panel
         self.panel = MainPanel(self,id)
+        p = self.panel
+
+        self.SetMenuBar(MainMenuBar(self,self.panel))
         
         #sizer = wx.BoxSizer(wx.VERTICAL)
         #sizer.Add(panel,1,wx.EXPAND)
         #self.SetSizerAndFit(sizer)
 
         # StatusBar and MenuBar 
-        self.SetStatusBar(MainStatusBar(self))
-        self.SetMenuBar(MainMenuBar(self,self.panel))
         
         # Icon
         iconPath = "./img/fau_icon.ico"
@@ -100,6 +105,24 @@ class faucetPRCFrame(wx.Frame):
 
         self.Centre()
         self.Show(True)
+
+    # Mostra la finestra per aggiungere una Registrazione
+    def OnAdd(self, evt):
+        recDialog = RecorderDialog(self, -1, "Crea un nuova Registrazione", size=(350, 200), style=wx.DEFAULT_DIALOG_STYLE)
+        recDialog.CenterOnScreen()
+
+        # Per capire se l'utente ha premuto Ok o Abort
+        choice = recDialog.ShowModal()
+    
+        if choice == wx.ID_OK:
+            data = recDialog.GetValues()        # Ottieni il valore di tutti i campi
+            maxKey = self.recPanel.GetMaxKey()  # Ottieni il max indice
+            maxKey += 1
+            # Inserisci la nuova registrazione nella lista
+            self.recPanel.UpdateItems(maxKey,data) 
+            self.recPanel.InsertValue(maxKey,data)
+        #else:
+        recDialog.Destroy()
 
     def DrawToolbar(self):
         tb = self.CreateToolBar(TBFLAGS)
@@ -205,48 +228,21 @@ class MainPanel(wx.Panel):
         
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         
-        #Aggiungi i due bottoni per l'eliminazione ed il download dei file
-        #deleteButton = wx.Button(self, wx.ID_DELETE)
-        #clearButton = wx.Button(self, wx.ID_CLEAR)
         saveButton = wx.Button(self, wx.ID_SAVEAS)
-        #upperSizer.Add(deleteButton,0,wx.EXPAND)
-        #upperSizer.Add(clearButton,0,wx.EXPAND)
         upSizer.Add(saveButton,0,wx.EXPAND)
         
-        #Associa un'azione ai bottoni
-        addButton.Bind(wx.EVT_BUTTON, self.OnAdd)
-        #clearButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveCompleted)
-        #deleteButton.Bind(wx.EVT_BUTTON, self.comPanel.OnRemoveSelected)
+        addButton.Bind(wx.EVT_BUTTON, parent.OnAdd)
         saveButton.Enable(False)
         saveButton.Bind(wx.EVT_BUTTON, self.OnSaveAs)
 
         self.saveButton = saveButton
         
-    # Mostra la finestra per aggiungere una Registrazione
-    def OnAdd(self, evt):
-        recDialog = RecorderDialog(self, -1, "Crea un nuova Registrazione", size=(350, 200), style=wx.DEFAULT_DIALOG_STYLE)
-        recDialog.CenterOnScreen()
-
-        # Per capire se l'utente ha premuto Ok o Abort
-        choice = recDialog.ShowModal()
-    
-        if choice == wx.ID_OK:
-            data = recDialog.GetValues()        # Ottieni il valore di tutti i campi
-            maxKey = self.recPanel.GetMaxKey()  # Ottieni il max indice
-            maxKey += 1
-            # Inserisci la nuova registrazione nella lista
-            self.recPanel.UpdateItems(maxKey,data) 
-            self.recPanel.InsertValue(maxKey,data)
-        #else:
-        recDialog.Destroy()
-
     def OnRefresh(self, event):
         try:
-            recs = vcast.i.get_recordings()
             self.recPanel.Clear()
             self.comPanel.Clear()
-            self.recPanel.Populate(recs)
-            self.recPanel.TransferOld()
+            self.recPanel.Populate(vcast.i.getFutureRecordings())
+            self.comPanel.Populate(vcast.i.getPastRecordings())
         except:
             print "Error"
 
@@ -279,7 +275,8 @@ if __name__ == '__main__':
     try:
         vcast.i.loadFile()
     except:
-        print "Wizard"
+        pass
+#        print "Wizard"
         # Set username and password
 
     faucetPRCFrame(None, wx.ID_ANY, 'Faucet PRC',vcast.i)

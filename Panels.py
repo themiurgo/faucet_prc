@@ -82,9 +82,6 @@ class RecorderPanel(wx.Panel):
         self.list.DeleteAllItems()
 
     def Populate(self, values):
-        # Vanno filtrati (futuri e passati) #TODO
-        
-        # Popola la lista con dati di esempio    
         for key, data in values.iteritems():
             self.InsertValue(key,data)
 
@@ -153,6 +150,7 @@ class CompletedPanel(wx.Panel):
         
         self.panel=panel
         self.frame=frame
+        self.avaibleN = 0 # Number of avaible downloads
         
         # Sizer, ovvero gestore del layout del pannello
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -198,8 +196,15 @@ class CompletedPanel(wx.Panel):
            
         # Routine per il popolamento delle colonne
         self.items = values.iteritems()
+        self.avaibleN = 0
         for key, data in self.items:
             self.InsertValue(key,data)
+        if self.avaibleN != 0:
+            self.frame.sb.SetStatusText(str(self.avaibleN) +
+                    " registrazioni pronte ad essere scaricate", 1)
+        else:
+            self.frame.sb.SetStatusText(
+                    "Nessuna registrazione disponibile", 1)
 
     def Clear(self):
         self.list.DeleteAllItems()
@@ -218,6 +223,7 @@ class CompletedPanel(wx.Panel):
         self.list.SetStringItem(index, 5, data.channel_type)
         if data.url != None:
             self.list.SetStringItem(index, 6, STRING_AVAILABLE)
+            self.avaibleN += 1
         self.list.SetItemData(index, key)
         if False:
             self.SetCompleteColour(index)
