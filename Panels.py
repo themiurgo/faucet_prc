@@ -125,6 +125,7 @@ class RecorderPanel(wx.Panel):
     def OnItemSelected(self, event):
         self.panel.comPanel.list.Select(
                 self.panel.comPanel.list.GetFirstSelected(),on=0)
+        self.panel.saveButton.Enable(False)
 
 # CheckBox provided and auto resizable list, used multiple inheritance
 class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin,
