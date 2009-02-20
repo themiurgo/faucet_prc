@@ -32,7 +32,7 @@ class RecorderDialog(wx.Dialog):
         
         titleBox = wx.BoxSizer(wx.HORIZONTAL)
 
-        titleLabel = wx.StaticText(self, -1, "Titolo")
+        titleLabel = wx.StaticText(self, -1, "Titolo : ")
         titleLabel.SetHelpText("Nome del programma che vuoi registrare")
         gridSizer.Add(titleLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
@@ -46,21 +46,21 @@ class RecorderDialog(wx.Dialog):
         
         typeBox = wx.BoxSizer(wx.HORIZONTAL)
         
-        stationLabel = wx.StaticText(self, -1, "Emittente:")
+        stationLabel = wx.StaticText(self, -1, "Emittente :")
         stationLabel.SetHelpText("Radio o televisiva")
         
-        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione")
+        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione : ")
         typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
         gridSizer.Add(typeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
         stationCB = StationComboBox(self)
         stationCB.SetHelpText("Nome dell'emittente")
             
-        formatLabel = wx.StaticText(self, -1, "Formato di registrazione")
-        formatLabel.SetHelpText("Help")
+        formatLabel = wx.StaticText(self, -1, "Formato di registrazione : ")
+        formatLabel.SetHelpText("Seleziona il formato desiderato")
         
         formatCB = FormatComboBox(self)
-        formatCB.SetHelpText("Here's some help text for field #3")
+        formatCB.SetHelpText("Seleziona fra le scelte disponibili")
         
         typeCB = TypeComboBox(self,stationCB,formatCB)
         typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
@@ -82,13 +82,14 @@ class RecorderDialog(wx.Dialog):
         dateBox = wx.BoxSizer(wx.HORIZONTAL)
         
         dateLabel = wx.StaticText(self, -1, "Giorno : ")
-        dateLabel.SetHelpText("Help")
+        
         dateBox.Add(dateLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
         dpc = wx.DatePickerCtrl(self, size=(120,-1),
                 style = wx.DP_DROPDOWN | wx.DP_ALLOWNONE)
         #self.Bind(wx.EVT_DATE_CHANGED, self.OnDateChanged, dpc)
         #sizer.Add(dpc, 0, wx.ALL, 50)
+        dpc.SetHelpText("Giorno di inizio della registrazione")
 
         if 'wxMSW' in wx.PlatformInfo:
             dpc = wx.GenericDatePickerCtrl(self, size=(120,-1),
@@ -101,8 +102,10 @@ class RecorderDialog(wx.Dialog):
         self.timeSpin = wx.SpinButton( self, -1, style=wx.SP_VERTICAL )
         self.time24 = masked.TimeCtrl(self, -1, name="24 hour control",
             fmt24hr=True, spinButton = self.timeSpin, display_seconds=False)
+            
+        self.time24.SetHelpText("Ora di inizio della registrazione")
 
-        hourLabel = wx.StaticText(self, -1, "Ora inizio ")
+        hourLabel = wx.StaticText(self, -1, "Ora inizio : ")
         hourLabel.SetHelpText("Help")
         dateBox.Add(hourLabel, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
         dateBox.Add(self.time24, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
@@ -119,6 +122,7 @@ class RecorderDialog(wx.Dialog):
             )
 
         self.slider.SetTickFreq(1, 1)
+        self.slider.SetHelpText("Durata (in minuti) della registrazione")
         
         self.Bind(masked.EVT_TIMEUPDATE, self.OnTimeUpdate)
         self.Bind(wx.EVT_SLIDER, self.OnTimeUpdate)
@@ -128,11 +132,12 @@ class RecorderDialog(wx.Dialog):
         #durationBox.AddSpacer(10,100000)
         durationBox.Add((30, 1))
        
-        endLabel = wx.StaticText(self, -1, "Ora termine ")
+        endLabel = wx.StaticText(self, -1, "Ora termine : ")
         endLabel.SetHelpText("Help")
         durationBox.Add(endLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
         
         self.endTimeLabel = wx.StaticText(self, -1, "00:00:00")
+        self.endTimeLabel.SetHelpText("Orario di termine della registrazione")
         self.endTimeLabel.SetHelpText("Help")
         durationBox.Add(self.endTimeLabel, 0, wx.ALIGN_LEFT|wx.TOP, 25)
          
