@@ -36,16 +36,9 @@ class PopMenuCompleted(wx.Menu):
                 
         self.AppendSeparator()
         
-        item2 = wx.MenuItem(self,wx.NewId(),
-                "&Minimizza",
-                "Minimizza la finestra")
-        iconPath ="./img/minimize.ico"
-        icon = wx.Image(iconPath, wx.BITMAP_TYPE_ICO)
-        item2.SetBitmap(wx.BitmapFromImage(icon)) 
-        self.AppendItem(item2)
+        self.Append(wx.ID_ABOUT,
+                "A&bout")
         
-       
-        self.Bind(wx.EVT_MENU, self.OnMinimize, item2)
         
         self.AppendSeparator()
         self.Append(wx.ID_EXIT,
@@ -55,6 +48,7 @@ class PopMenuCompleted(wx.Menu):
        
         self.Bind(wx.EVT_MENU,  self.parent.OnRemoveCompleted , id=wx.ID_CLEAR)
         self.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
+        self.Bind(wx.EVT_MENU, self.frame.OnAbout, id=wx.ID_ABOUT)
         self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, id=wx.ID_EXIT)
 
     

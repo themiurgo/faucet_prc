@@ -43,7 +43,7 @@ class MainMenuBar(wx.MenuBar):
 
         frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
-        frame.Bind(wx.EVT_MENU, frame.OnAboutBox, id=wx.ID_ABOUT)
+        frame.Bind(wx.EVT_MENU, frame.OnAbout, id=wx.ID_ABOUT)
         frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
 
@@ -176,7 +176,7 @@ class faucetPRCFrame(wx.Frame):
     def OnMenuExit(self,event):
         self.Close(True)
         
-    def OnAboutBox(self, event):
+    def OnAbout(self, event):
         description = """Faucer PRC e' un client che consente di interagire con il servizio web Vcast. Permette di programmare le registrazioni di canali televisivi e radiofonici, gestire le programmazioni, modificarle e scaricarle quando disponibili."""
         
         licence="""
