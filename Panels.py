@@ -263,6 +263,8 @@ class CompletedPanel(wx.Panel):
         id = self.list.GetItemData(position) # Unique ID
         url = vcast.i.recordings[id].url
         if url != None:
-            self.panel.saveButton.Enable(True)
+            #self.panel.saveButton.Enable(True)
+            self.frame.tb.EnableTool(wx.ID_SAVEAS, True)
         else:
-            self.panel.saveButton.Enable(False)
+            #self.panel.saveButton.Enable(False)
+            self.frame.tb.EnableTool(wx.ID_SAVEAS, False)

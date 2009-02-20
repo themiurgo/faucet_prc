@@ -131,10 +131,10 @@ class faucetPRCFrame(wx.Frame):
               wx.TB_HORIZONTAL
             | wx.NO_BORDER
             | wx.TB_FLAT
-            #| wx.TB_TEXT
+            | wx.TB_TEXT
             #| wx.TB_HORZ_LAYOUT
             )
-        tsize = (48,48)
+        tsize = (24,24)
         add_bmp = wx.ArtProvider.GetBitmap(wx.ART_ADD_BOOKMARK,
                 wx.ART_TOOLBAR, tsize)
         refresh_bmp = wx.ArtProvider.GetBitmap("gtk-refresh",
@@ -146,30 +146,32 @@ class faucetPRCFrame(wx.Frame):
 
         tb.SetToolBitmapSize(tsize)
        
-        tb.AddLabelTool(wx.ID_ADD, "New", add_bmp, shortHelp="New", longHelp="Long help for 'New'")
+        tb.AddLabelTool(wx.ID_ADD, "Aggiungi", add_bmp, shortHelp="New", longHelp="Long help for 'New'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=10)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=10)
 
         #tb.AddSimpleTool(20, open_bmp, "Open", "Long help for 'Open'")
-        tb.AddLabelTool(wx.ID_REFRESH, "Open", refresh_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
+        tb.AddLabelTool(wx.ID_REFRESH, "Aggiorna", refresh_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=20)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=20)
 
-        tb.AddSimpleTool(wx.ID_REMOVE, remove_bmp, "Rimuovi",
-                "Rimuovi dalla lista")
+        tb.AddLabelTool(wx.ID_REMOVE, "Rimuovi", remove_bmp,
+                longHelp="Rimuovi dalla lista")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=30)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=30)
 
-        tb.AddSimpleTool(wx.ID_SAVEAS, saveas_bmp, "Scarica",
-                "Scarica il file attraverso il browser")
+        tb.AddLabelTool(wx.ID_SAVEAS, "Scarica", saveas_bmp,
+                longHelp="Scarica il file attraverso il browser")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=40)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=40)
+        tb.EnableTool(wx.ID_SAVEAS,False)
 
         tb.AddSeparator()
 
         # Final thing to do for a toolbar is call the Realize() method. This
         # causes it to render (more or less, that is).
         tb.Realize()
+        self.tb = tb
 
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
@@ -247,16 +249,16 @@ class MainPanel(wx.Panel):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(mainSizer)
         
-        # Upper Buttons
-        upSizer = wx.BoxSizer(wx.HORIZONTAL)
-        addButton = wx.Button(self, wx.ID_ADD)
-        refreshButton = wx.Button(self, wx.ID_REFRESH)
-        deleteButton = wx.Button(self, wx.ID_REMOVE)
-        upSizer.Add(addButton)
-        upSizer.Add(refreshButton)
-        upSizer.Add(deleteButton)
-        mainSizer.Add(upSizer)
-        refreshButton.Bind(wx.EVT_BUTTON, self.OnRefresh)
+# Upper Buttons
+#        upSizer = wx.BoxSizer(wx.HORIZONTAL)
+#        addButton = wx.Button(self, wx.ID_ADD)
+#        refreshButton = wx.Button(self, wx.ID_REFRESH)
+#        deleteButton = wx.Button(self, wx.ID_REMOVE)
+#        upSizer.Add(addButton)
+#        upSizer.Add(refreshButton)
+#        upSizer.Add(deleteButton)
+#        mainSizer.Add(upSizer)
+#        refreshButton.Bind(wx.EVT_BUTTON, self.OnRefresh)
         
         #Crea lo splitter, che contiene i due pannelli ridimensionabili
         splitter = wx.SplitterWindow(self,style=wx.SP_LIVE_UPDATE)
@@ -275,14 +277,14 @@ class MainPanel(wx.Panel):
         splitter.SplitHorizontally(self.recPanel, self.comPanel)
         
         saveButton = wx.Button(self, wx.ID_SAVEAS)
-        upSizer.Add(saveButton,0,wx.EXPAND)
+#        upSizer.Add(saveButton,0,wx.EXPAND)
         
-        deleteButton.Bind(wx.EVT_BUTTON, parent.OnRemove)
-        addButton.Bind(wx.EVT_BUTTON, parent.OnAdd)
-        saveButton.Enable(False)
-        saveButton.Bind(wx.EVT_BUTTON, self.OnSaveAs)
-
-        self.saveButton = saveButton
+#        deleteButton.Bind(wx.EVT_BUTTON, parent.OnRemove)
+#        addButton.Bind(wx.EVT_BUTTON, parent.OnAdd)
+#        saveButton.Enable(False)
+#        saveButton.Bind(wx.EVT_BUTTON, self.OnSaveAs)
+#
+#        self.saveButton = saveButton
         
     def OnRefresh(self, event):
         try:
