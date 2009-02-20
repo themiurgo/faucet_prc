@@ -51,9 +51,7 @@ class PopMenuRecorder(wx.Menu):
         self.Append(wx.ID_EXIT,
                 "&Esci")
         
-        
-       
-        self.Bind(wx.EVT_MENU,  self.panel.OnAdd, id=wx.ID_ADD)
+        self.Bind(wx.EVT_MENU,  self.frame.OnAdd, id=wx.ID_ADD)
         self.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, id=wx.ID_EXIT)
 

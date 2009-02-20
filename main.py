@@ -28,20 +28,20 @@ class MainMenuBar(wx.MenuBar):
         self.Append(help, "&?")
 
         # Menu Registrazioni
-        reg.Append(wx.ID_ADD, "Aggiungi",
+        reg.Append(wx.ID_ADD, "A&ggiungi\tCTRL+G",
             "Aggiungi una nuova registrazione")
-        reg.Append(wx.ID_REFRESH, "Aggiorna",
+        reg.Append(wx.ID_REFRESH, "&Aggiorna\tCTRL+A",
                 "Aggiorna la lita delle registrazioni")
-        reg.Append(wx.ID_PREFERENCES, "Account",
+        reg.Append(wx.ID_PREFERENCES, "Acc&ount\tCTRL+O",
             "Imposta le credenziali dell'account Vcast")
         reg.AppendSeparator()
-        reg.Append(wx.ID_EXIT, "&Esci\tCTRL+Q")
+        reg.Append(wx.ID_EXIT, "&Esci\tCTRL+Q","Esci dal programma")
        
         # Menu HELP
         help.Append(wx.ID_ABOUT, "&About",
             "Informazioni su Faucet PRC")
 
-#        frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
+        frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
         frame.Bind(wx.EVT_MENU, frame.OnAboutBox, id=wx.ID_ABOUT)
         frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
@@ -179,7 +179,20 @@ class faucetPRCFrame(wx.Frame):
     def OnAboutBox(self, event):
         description = """Faucer PRC e' un client che consente di interagire con il servizio web Vcast. Permette di programmare le registrazioni di canali televisivi e radiofonici, gestire le programmazioni, modificarle e scaricarle quando disponibili."""
         
-        licence="""LICENZA"""
+        licence="""
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
 
         info = wx.AboutDialogInfo()
 
@@ -190,9 +203,9 @@ class faucetPRCFrame(wx.Frame):
         #info.SetCopyright('(C) 2007 jan bodnar')
         info.SetWebSite(('http://www.vcast.it',"Sito web di Vcast"))
         info.SetLicence(licence)
-        info.AddDeveloper('Antonio Lima antonio.lima@gmail.com\nDaniele Marletta  danielemar@gmail.com')
-        info.AddDocWriter('Antonio Lima antonio.lima@gmail.com\nDaniele Marletta  danielemar@gmail.com')
-        info.AddArtist('Antonio Lima antonio.lima@gmail.com\nDaniele Marletta  danielemar@gmail.com')
+        info.AddDeveloper('Antonio Lima anto87@gmail.com\nDaniele Marletta  danielemar@gmail.com')
+        info.AddDocWriter('Antonio Lima anto87@gmail.com\nDaniele Marletta  danielemar@gmail.com')
+        info.AddArtist('Antonio Lima anto87@gmail.com\nDaniele Marletta  danielemar@gmail.com')
 	#info.AddTranslator('jan bodnar')
 
         wx.AboutBox(info)
