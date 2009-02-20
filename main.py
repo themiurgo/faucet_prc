@@ -125,6 +125,7 @@ class faucetPRCFrame(wx.Frame):
         id = list.GetItemData(position) # Unique ID
         print "position", position, "id", id
         self.interface.delRecording(id)
+        #self.panel.recPanel.RemoveValueFromDictionary(id)
         self.panel.OnRefresh(None)
 
     def DrawToolbar(self):

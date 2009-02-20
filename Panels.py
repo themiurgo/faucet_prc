@@ -9,20 +9,28 @@ from datetime import datetime, timedelta
 STRING_WAITING='In lavorazione'
 STRING_AVAILABLE='Disponibile'
 STRING_DOWNLOADED='Scaricato'
+PastRecordings={}
+FutureRecordings={}
 
 # Sortable and auto-resizable list, multiple inheritance used
 class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin,
         ListCtrlAutoWidthMixin):
 
-    def __init__(self, parent):
+    def __init__(self, parent,col,panelType):
         wx.ListCtrl.__init__(self, parent, -1,
                 style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_SINGLE_SEL)
         self.SetSingleStyle(wx.LC_HRULES, True)
-        ColumnSorterMixin.__init__(self, 6)
+        ColumnSorterMixin.__init__(self, col)
         ListCtrlAutoWidthMixin.__init__(self)
-
+        if panelType==0:
+            self.itemDataMap = PastRecordings
+        elif panelType==1:
+            self.itemDataMap = FutureRecordings
+              
     def GetListCtrl(self):
         return self
+        
+  
 
 # Panel of future recordings
 class RecorderPanel(wx.Panel):
@@ -48,14 +56,15 @@ class RecorderPanel(wx.Panel):
         
         # Crea la lista e aggiungi le colonne
         widthCol = 90
-        self.list = SortedListCtrl(self)
+        self.list = SortedListCtrl(self,6,0)
         self.list.InsertColumn(0, 'Titolo', width=140)
         self.list.InsertColumn(1, 'Canale', width=widthCol)
         self.list.InsertColumn(2, 'Data', width=2*widthCol)
         self.list.InsertColumn(3, 'Durata', width=widthCol)
         self.list.InsertColumn(4, 'Formato', width=widthCol)
         self.list.InsertColumn(5, 'Tipo', width=widthCol)
-
+         
+       
         panelSizer.Add(self.list, 1, wx.EXPAND)
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
 
@@ -89,9 +98,17 @@ class RecorderPanel(wx.Panel):
                     self.panel.comPanel.list.SetStringItem(k, j,
                             self.list.GetItem(i,j).GetText())
                 self.list.DeleteItem(i)
+                #print i
+                key = self.list.GetItemData(i)
+                self.panel.OnRefresh(None)
+                
+    #def RemoveValueFromDictionary(self,key):
+        #del PastRecordings[key]
+        
         
     # Inserisci un nuovo valore nella lista   
     def InsertValue(self,key,data):
+        PastRecordings[key]=(data.title,data.channel,data.from_time,data.rec_time,data.format,data.channel_type)
         index = self.list.InsertStringItem(sys.maxint, data.title)
         self.list.SetStringItem(index, 1, data.channel)
         self.list.SetStringItem(index, 2, data.from_time)
@@ -157,7 +174,7 @@ class CompletedPanel(wx.Panel):
         
         # Crea l'oggetto CheckListCtrl e le relative colonne
         widthCol=90
-        self.list = SortedListCtrl(self)
+        self.list = SortedListCtrl(self,7,1)
         self.list.InsertColumn(0, 'Titolo', width=140)
         self.list.InsertColumn(1, 'Canale', width=widthCol)
         self.list.InsertColumn(2, 'Data', width=2*widthCol)
@@ -214,11 +231,14 @@ class CompletedPanel(wx.Panel):
         if data.url != None:
             self.list.SetStringItem(index, 6, STRING_AVAILABLE)
             self.avaibleN += 1
+            final = STRING_AVAILABLE
         else:
+            final = STRING_WAITING
             self.list.SetStringItem(index, 6, STRING_WAITING)
         self.list.SetItemData(index, key)
         if False:
             self.SetCompleteColour(index)
+        FutureRecordings[key]=(data.title,data.channel,data.from_time,data.rec_time,data.format,data.channel_type,final)
     
     def SetCompleteColour(self,index):
         self.list.SetItemBackgroundColour(index,"light green")    
@@ -243,6 +263,7 @@ class CompletedPanel(wx.Panel):
                 self.list.DeleteItem(i-count)
                 count+=1; 
                 del recordings_past[itemData]
+                #del FutureRecordings[itemData]
 
     def OnRemoveCompleted(self, event):
         num = self.list.GetItemCount()

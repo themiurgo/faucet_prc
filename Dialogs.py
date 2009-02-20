@@ -44,36 +44,28 @@ class RecorderDialog(wx.Dialog):
     
     # TYPE STATION FORMAT -------------------------
         
-        typeBox = wx.BoxSizer(wx.HORIZONTAL)
-        
-        stationLabel = wx.StaticText(self, -1, "Emittente :")
-        stationLabel.SetHelpText("Radio o televisiva")
-        
-        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione : ")
-        typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
-        gridSizer.Add(typeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        
         stationCB = StationComboBox(self)
         stationCB.SetHelpText("Nome dell'emittente")
             
-        formatLabel = wx.StaticText(self, -1, "Formato di registrazione : ")
-        formatLabel.SetHelpText("Seleziona il formato desiderato")
-        
         formatCB = FormatComboBox(self)
         formatCB.SetHelpText("Seleziona fra le scelte disponibili")
         
         typeCB = TypeComboBox(self,stationCB,formatCB)
         typeCB.SetHelpText("A seconda dell'opzione selezionata, si modificheranno i canali")
+        
+        
+        typeLabel = wx.StaticText(self, -1, "Tipo di registrazione : ")
+        typeLabel.SetHelpText("Puo' essere 'Radio' o 'TV'")
+        gridSizer.Add(typeLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         gridSizer.Add(typeCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
-        #secondBox.Add(stationLabel, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        #secondBox.Add(stationCB, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        
-        stationBox = wx.BoxSizer(wx.HORIZONTAL)
+        stationLabel = wx.StaticText(self, -1, "Emittente :")
+        stationLabel.SetHelpText("Radio o televisiva")
         gridSizer.Add(stationLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         gridSizer.Add(stationCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
-        formatBox = wx.BoxSizer(wx.HORIZONTAL)
+        formatLabel = wx.StaticText(self, -1, "Formato di registrazione : ")
+        formatLabel.SetHelpText("Seleziona il formato desiderato")
         gridSizer.Add(formatLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         gridSizer.Add(formatCB, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         
