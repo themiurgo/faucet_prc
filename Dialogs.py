@@ -323,7 +323,7 @@ class FormatComboBox(wx.ComboBox):
 class SettingsDialog(wx.Dialog):
     def __init__(self, parent, ID, title, interface):
         wx.Dialog.__init__(self, parent, wx.ID_ANY,
-                title="Impostazioni dell'account")
+                title="Impostazioni account")
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         
