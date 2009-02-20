@@ -3,7 +3,10 @@ import wx.lib.masked as masked
 from datetime import datetime, timedelta
 from vcast import Recording
 
-typeReg = ['video','audio']
+STRING_TV="TV"
+STRING_RADIO="Radio"
+
+typeReg = [STRING_TV,STRING_RADIO]
 formatTV = ['ipod','divx','appletv','psp','mp3']
 formatRadio = ['mp3']
 NO_SELECTION = ''
@@ -225,9 +228,14 @@ class RecorderDialog(wx.Dialog):
         delta = timedelta(minutes=self.slider.GetValue())
         adate = adate + delta
         rec_time = datetime.strftime(adate, "%H:%M")
+        
+        if self.typeCB.GetValue() == STRING_TV:
+            sendType = 'video'
+        elif self.typeCB.GetValue() == STRING_RADIO:
+            sendType = 'audio'
 
         r = Recording(-1, self.title.GetValue(), self.stationCB.GetValue(),
-                self.typeCB.GetValue(), from_time,
+                sendType, from_time,
                 rec_time, self.formatCB.GetValue())
         self.frame.interface.new_recording(r)
         self.frame.panel.OnRefresh(None)
@@ -288,10 +296,10 @@ class FormatComboBox(wx.ComboBox):
     def SetFormats(self,stationType):
         self.Clear()
         self.SetValue(NO_SELECTION)
-        if stationType == 'audio':
+        if stationType == STRING_RADIO:
             #self.Clear()
             self.AppendItems(formatRadio)
-        elif stationType == 'video':
+        elif stationType == STRING_TV:
             self.AppendItems(formatTV)
         #cb = evt.GetEventObject()
         #data = evt.GetString()
