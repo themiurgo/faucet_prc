@@ -38,6 +38,8 @@ class PopMenuRecorder(wx.Menu):
         self.Append(wx.ID_ABOUT,
                 "A&bout")
         
+        self.Append(wx.ID_REMOVE,
+                "&Rimuovi")
         
         self.AppendSeparator()
         
@@ -47,6 +49,7 @@ class PopMenuRecorder(wx.Menu):
         self.Bind(wx.EVT_MENU,  self.frame.OnAdd, id=wx.ID_ADD)
         self.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         self.Bind(wx.EVT_MENU, self.frame.onCloseWindow, id=wx.ID_EXIT)
+        self.Bind(wx.EVT_MENU, self.frame.OnRemove, id=wx.ID_REMOVE)
         self.Bind(wx.EVT_MENU, self.frame.OnAbout, id=wx.ID_ABOUT)
 
     
