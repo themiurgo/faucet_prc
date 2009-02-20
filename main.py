@@ -178,18 +178,22 @@ class faucetPRCFrame(wx.Frame):
         self.Close(True)
         
     def OnAboutBox(self, event):
+        description = """Faucer PRC e' un client che consente di interagire con il servizio web Vcast. Permette di programmare le registrazioni di canali televisivi e radiofonici, gestire le programmazioni, modificarle e scaricarle quando disponibili."""
+        
+        licence="""LICENZA"""
+
         info = wx.AboutDialogInfo()
 
-     #   info.SetIcon(wx.Icon('icons/hunter.png', wx.BITMAP_TYPE_PNG))
-        info.SetName('File Hunter')
+        info.SetIcon(wx.Icon('./img/fau_big.gif', wx.BITMAP_TYPE_GIF))
+        info.SetName('Faucet PRC')
         info.SetVersion('1.0')
-        info.SetDescription("ciao")
-        info.SetCopyright('(C) 2007 jan bodnar')
-        info.SetWebSite('http://www.zetcode.com')
-        info.SetLicence("eccoci")
-        info.AddDeveloper('jan bodnar')
-        info.AddDocWriter('jan bodnar')
-        info.AddArtist('The Tango crew')
+        info.SetDescription(description)
+        #info.SetCopyright('(C) 2007 jan bodnar')
+        info.SetWebSite(('http://www.vcast.it',"Sito web di Vcast"))
+        info.SetLicence(licence)
+        info.AddDeveloper('Antonio Lima antonio.lima@gmail.com\nDaniele Marletta  danielemar@gmail.com')
+        info.AddDocWriter('Antonio Lima antonio.lima@gmail.com\nDaniele Marletta  danielemar@gmail.com')
+        info.AddArtist('Antonio Lima antonio.lima@gmail.com\nDaniele Marletta  danielemar@gmail.com')
 	#info.AddTranslator('jan bodnar')
 
         wx.AboutBox(info)
