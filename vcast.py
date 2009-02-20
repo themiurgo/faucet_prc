@@ -122,7 +122,8 @@ class Interface(object):
             try:
                 self.recordings[id].url = i
             except:
-                print "Recording", id, "not found"
+                pass
+                # print "Recording", id, "not found"
         # self.saveFile()
         return self.recordings
 
