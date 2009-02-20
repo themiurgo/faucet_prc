@@ -8,7 +8,6 @@ from restful_lib import Connection
 import re
 import feedparser
 
-
 def timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
     """This function will spawn a thread and run the given function
     using the args, kwargs and return the given default value if the
@@ -30,6 +29,10 @@ def timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
 
 class Interface(object):
     """Provides interface for vcast services"""
+
+    def new_recording(self, recording):
+        """Invia al server una nuova programmazione"""
+        self.account.new_recording(recording)
 
     def setAccount(self, username, password):
         if not username or not password:
@@ -60,7 +63,15 @@ class Interface(object):
             raise
 
     def get_channels(self):
-        return self.account.get_channels()
+        channels = self.account.get_channels()
+        video = []
+        audio = []
+        for i in channels:
+            if i['type'] == 'audio':
+                audio.append(i['name'])
+            else:
+                video.append(i['name'])
+        return (audio, video)
 
     def getFutureRecordings(self):
         r = {}
@@ -120,11 +131,13 @@ class Interface(object):
 
         Removes the recording both from remote and local.
         """
-        del self.recordings[id]
         if not self.account:
             return
-        self.account.delete_recording(self.id_rec)
-        del recordings.r[id_rec]
+        try:
+            self.account.delete_recording(id)
+            del self.recordings[id]
+        except:
+            print "Error"
 
 class Account(object):
     """A vcast account.
@@ -201,11 +214,15 @@ class Account(object):
 
     def new_recording(self, recording):
         """Invia al server una nuova programmazione"""
-        pass
+        json = recording.toJson()
+        print json
+        a = self.connection.request_post('/recordings', body=json)
+        print a
 
     def delete_recording(self, id):
-        feed = self.connection.request_get('/delete_recording',
+        repl = self.connection.request_get('/delete_recording',
                 args={'id_rec':str(id)})
+        print repl
 
 class Recording(object):
     """A recording"""
@@ -232,5 +249,18 @@ class Recording(object):
         self.repeat = "no_repeat"
         self.retention = "3"
         self.url = None # This change to download url when avaible
+
+    def toJson(self):
+        a = {
+         "from_time": self.from_time,
+         "ch_name": self.channel,
+         "to_time": self.to_time,
+         "ch_type": self.channel_type,
+         "retention": self.retention,
+         "repeat": self.repeat,
+         "format": self.format,
+         "title": self.title
+        }
+        return simplejson.dumps(a)
 
 i = Interface()

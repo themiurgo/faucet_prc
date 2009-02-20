@@ -41,13 +41,12 @@ class MainMenuBar(wx.MenuBar):
         help.Append(wx.ID_ABOUT, "&About",
             "Informazioni su Faucet PRC")
 
-        frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
+#        frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
         frame.Bind(wx.EVT_MENU, frame.OnAboutBox, id=wx.ID_ABOUT)
         frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
-        
-    
+
 
 class MainStatusBar(wx.StatusBar):
     def __init__(self, parent):
@@ -97,8 +96,6 @@ class faucetPRCFrame(wx.Frame):
         #sizer.Add(panel,1,wx.EXPAND)
         #self.SetSizerAndFit(sizer)
 
-        # StatusBar and MenuBar 
-        
         # Icon
         iconPath = "./img/fau_icon.ico"
         icon = wx.Icon(iconPath, wx.BITMAP_TYPE_ICO)
@@ -111,21 +108,23 @@ class faucetPRCFrame(wx.Frame):
 
     # Mostra la finestra per aggiungere una Registrazione
     def OnAdd(self, evt):
-        recDialog = RecorderDialog(self, -1, "Crea un nuova Registrazione", size=(350, 200), style=wx.DEFAULT_DIALOG_STYLE)
+        recDialog = RecorderDialog(self, wx.ID_ANY,
+                "Crea un nuova Registrazione", size=(350, 200),
+                style=wx.DEFAULT_DIALOG_STYLE)
         recDialog.CenterOnScreen()
 
-        # Per capire se l'utente ha premuto Ok o Abort
-        choice = recDialog.ShowModal()
-    
-        if choice == wx.ID_OK:
-            data = recDialog.GetValues()        # Ottieni il valore di tutti i campi
-            maxKey = self.recPanel.GetMaxKey()  # Ottieni il max indice
-            maxKey += 1
-            # Inserisci la nuova registrazione nella lista
-            self.recPanel.UpdateItems(maxKey,data) 
-            self.recPanel.InsertValue(maxKey,data)
-        #else:
-        recDialog.Destroy()
+        choice = recDialog.Show()
+
+    def OnRemove(self, event):
+        list = self.panel.recPanel.list
+        position = list.GetFirstSelected() # Position in the ListCtrl
+        if position == -1:
+            list = self.panel.comPanel.list
+            position = list.GetFirstSelected() # Position in the ListCtrl
+        id = list.GetItemData(position) # Unique ID
+        print "position", position, "id", id
+        self.interface.delRecording(id)
+        self.panel.OnRefresh(None)
 
     def DrawToolbar(self):
         tb = self.CreateToolBar(TBFLAGS)
@@ -255,6 +254,7 @@ class MainPanel(wx.Panel):
         saveButton = wx.Button(self, wx.ID_SAVEAS)
         upSizer.Add(saveButton,0,wx.EXPAND)
         
+        deleteButton.Bind(wx.EVT_BUTTON, parent.OnRemove)
         addButton.Bind(wx.EVT_BUTTON, parent.OnAdd)
         saveButton.Enable(False)
         saveButton.Bind(wx.EVT_BUTTON, self.OnSaveAs)
@@ -263,10 +263,13 @@ class MainPanel(wx.Panel):
         
     def OnRefresh(self, event):
         try:
+            print "Refreshing...",
             self.recPanel.Clear()
             self.comPanel.Clear()
+            vcast.i.get_recordings()
             self.recPanel.Populate(vcast.i.getFutureRecordings())
             self.comPanel.Populate(vcast.i.getPastRecordings())
+            print "Refresh completed!"
         except:
             print "Error"
 
