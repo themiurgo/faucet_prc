@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from vcast import Recording
 
 typeReg = ['video','audio']
-formatTV = ['ipod','divx']
+formatTV = ['ipod','divx','appletv','psp','mp3']
 formatRadio = ['mp3']
 NO_SELECTION = ''
 
