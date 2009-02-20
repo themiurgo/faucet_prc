@@ -31,7 +31,7 @@ class MainMenuBar(wx.MenuBar):
         reg.Append(wx.ID_ADD, "A&ggiungi\tCTRL+G",
             "Aggiungi una nuova registrazione")
         reg.Append(wx.ID_REFRESH, "&Aggiorna\tCTRL+A",
-                "Aggiorna la lita delle registrazioni")
+                "Aggiorna la lista delle registrazioni")
         reg.Append(wx.ID_PREFERENCES, "Acc&ount\tCTRL+O",
             "Imposta le credenziali dell'account Vcast")
         reg.AppendSeparator()
