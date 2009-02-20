@@ -281,12 +281,22 @@ class SettingsDialog(wx.Dialog):
                 title="Impostazioni dell'account")
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-
-        label = wx.StaticText(self, -1,
-            "Inserisci le credenziali per l'accesso a Vcast. Per"+
-            " registrarti vai su vcast.it")
-        label.Wrap(250)
-        sizer.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        subsizer= wx.BoxSizer(wx.HORIZONTAL)
+        
+        link = wx.HyperlinkCtrl(self,-1,"vcast.it","http://www.vcast.it");
+        label1 = wx.StaticText(self, -1,
+            "Inserisci le tue credenziali Vcast.")
+        #label.Wrap(250)
+        sizer.Add(label1, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        label2 = wx.StaticText(self, -1,
+            "Per registrarti, vai su :  ")
+        
+        subsizer.Add(label2, 0, wx.ALIGN_RIGHT)
+        subsizer.Add(link, 0, wx.ALIGN_LEFT)
+        
+        sizer.Add(subsizer, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
 
