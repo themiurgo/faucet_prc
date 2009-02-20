@@ -165,6 +165,7 @@ class faucetPRCFrame(wx.Frame):
                 longHelp="Rimuovi la registrazione dalla lista")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=30)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=30)
+        tb.EnableTool(wx.ID_REMOVE, False)
 
         tb.AddLabelTool(wx.ID_SAVEAS, "Scarica", saveas_bmp,
                 shortHelp="Scarica il file della registrazione (browser)",

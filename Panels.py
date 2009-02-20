@@ -60,6 +60,7 @@ class RecorderPanel(wx.Panel):
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
 
         self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+        self.list.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselect)
 
         self.timer = wx.PyTimer(self.TransferOld)
         self.timer.Start(30000)
@@ -116,6 +117,12 @@ class RecorderPanel(wx.Panel):
                 self.panel.comPanel.list.GetFirstSelected(),on=0)
         #self.panel.saveButton.Enable(False)
         self.frame.tb.EnableTool(wx.ID_SAVEAS, False)
+        self.frame.tb.EnableTool(wx.ID_REMOVE, True)
+
+    def OnItemDeselect(self, event):
+        if (self.panel.comPanel.list.GetFirstSelected() < 0
+                and self.panel.recPanel.list.GetFirstSelected() < 0):
+            self.frame.tb.EnableTool(wx.ID_REMOVE, False)
 
 # CheckBox provided and auto resizable list, used multiple inheritance
 class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin,
@@ -164,6 +171,7 @@ class CompletedPanel(wx.Panel):
         
         self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+        self.list.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselect)
 
         # Aggiunta della lista
         #vbox.Add(self.list, 1, wx.EXPAND)
@@ -258,6 +266,7 @@ class CompletedPanel(wx.Panel):
                 #self.log.AppendText(self.list.GetItemText(i) + '\n')
 
     def OnItemSelected(self, event):
+        self.frame.tb.EnableTool(wx.ID_REMOVE, True)
         self.panel.recPanel.list.Select(
                 self.panel.recPanel.list.GetFirstSelected(),on=0)
         position = self.list.GetFirstSelected() # Position in the ListCtrl
@@ -269,3 +278,8 @@ class CompletedPanel(wx.Panel):
         else:
             #self.panel.saveButton.Enable(False)
             self.frame.tb.EnableTool(wx.ID_SAVEAS, False)
+
+    def OnItemDeselect(self, event):
+        if (self.panel.comPanel.list.GetFirstSelected() < 0
+                and self.panel.recPanel.list.GetFirstSelected() < 0):
+            self.frame.tb.EnableTool(wx.ID_REMOVE, False)
