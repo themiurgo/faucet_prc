@@ -42,11 +42,12 @@ class MainMenuBar(wx.MenuBar):
             "Informazioni su Faucet PRC")
 
         frame.Bind(wx.EVT_MENU, frame.OnAdd, id=wx.ID_ADD)
+        frame.Bind(wx.EVT_MENU, frame.OnRemove, id=wx.ID_REMOVE)
+        frame.Bind(wx.EVT_MENU, frame.panel.OnSaveAs, id=wx.ID_SAVEAS)
         frame.Bind(wx.EVT_MENU, frame.Settings, id=wx.ID_PREFERENCES)
         frame.Bind(wx.EVT_MENU, frame.OnAbout, id=wx.ID_ABOUT)
         frame.Bind(wx.EVT_MENU, self.panel.OnRefresh, id=wx.ID_REFRESH)
         frame.Bind(wx.EVT_MENU, frame.OnMenuExit, id=wx.ID_EXIT)
-
 
 class MainStatusBar(wx.StatusBar):
     def __init__(self, parent):
