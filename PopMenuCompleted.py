@@ -33,16 +33,14 @@ class PopMenuCompleted(wx.Menu):
         
         self.Append(wx.ID_REFRESH,
                 "&Aggiorna")
-        
-        self.Append(wx.ID_REMOVE,
-                "&Rimuovi")
-        
-                
+               
         self.AppendSeparator()
         
         self.Append(wx.ID_ABOUT,
                 "A&bout")
         
+        self.Append(wx.ID_REMOVE,
+                "&Rimuovi") 
         
         self.AppendSeparator()
         self.Append(wx.ID_EXIT,
