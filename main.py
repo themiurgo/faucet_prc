@@ -80,7 +80,7 @@ class faucetPRCFrame(wx.Frame):
     def __init__(self, parent, id, title, interface):
         wx.Frame.__init__(self, parent, id, title, size=(800, 600))
 
-        # self.DrawToolbar()
+        self.DrawToolbar()
         self.interface = interface
 
         self.sb = MainStatusBar(self)
@@ -127,31 +127,41 @@ class faucetPRCFrame(wx.Frame):
         self.panel.OnRefresh(None)
 
     def DrawToolbar(self):
-        tb = self.CreateToolBar(TBFLAGS)
-        tsize = (24,24)
-        new_bmp = wx.ArtProvider.GetBitmap(wx.ART_NEW, wx.ART_TOOLBAR, tsize)
-        open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize)
-        copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR, tsize)
-        paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR, tsize)
+        tb = self.CreateToolBar(
+              wx.TB_HORIZONTAL
+            | wx.NO_BORDER
+            | wx.TB_FLAT
+            #| wx.TB_TEXT
+            #| wx.TB_HORZ_LAYOUT
+            )
+        tsize = (48,48)
+        add_bmp = wx.ArtProvider.GetBitmap(wx.ART_ADD_BOOKMARK,
+                wx.ART_TOOLBAR, tsize)
+        refresh_bmp = wx.ArtProvider.GetBitmap("gtk-refresh",
+                wx.ART_TOOLBAR, tsize)
+        remove_bmp = wx.ArtProvider.GetBitmap("gtk-remove",
+                wx.ART_TOOLBAR, tsize)
+        saveas_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE,
+                wx.ART_TOOLBAR, tsize)
 
         tb.SetToolBitmapSize(tsize)
-        
-        #tb.AddSimpleTool(10, new_bmp, "New", "Long help for 'New'")
-        tb.AddLabelTool(10, "New", new_bmp, shortHelp="New", longHelp="Long help for 'New'")
+       
+        tb.AddLabelTool(wx.ID_ADD, "New", add_bmp, shortHelp="New", longHelp="Long help for 'New'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=10)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=10)
 
         #tb.AddSimpleTool(20, open_bmp, "Open", "Long help for 'Open'")
-        tb.AddLabelTool(20, "Open", open_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
+        tb.AddLabelTool(wx.ID_REFRESH, "Open", refresh_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=20)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=20)
 
-        tb.AddSeparator()
-        tb.AddSimpleTool(30, copy_bmp, "Copy", "Long help for 'Copy'")
+        tb.AddSimpleTool(wx.ID_REMOVE, remove_bmp, "Rimuovi",
+                "Rimuovi dalla lista")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=30)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=30)
 
-        tb.AddSimpleTool(40, paste_bmp, "Paste", "Long help for 'Paste'")
+        tb.AddSimpleTool(wx.ID_SAVEAS, saveas_bmp, "Scarica",
+                "Scarica il file attraverso il browser")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=40)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=40)
 
