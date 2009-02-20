@@ -147,22 +147,24 @@ class faucetPRCFrame(wx.Frame):
 
         tb.SetToolBitmapSize(tsize)
        
-        tb.AddLabelTool(wx.ID_ADD, "Aggiungi", add_bmp, shortHelp="New", longHelp="Long help for 'New'")
+        tb.AddLabelTool(wx.ID_ADD, "Aggiungi", add_bmp,
+                longHelp="Aggiungi una nuova registrazione'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=10)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=10)
 
         #tb.AddSimpleTool(20, open_bmp, "Open", "Long help for 'Open'")
-        tb.AddLabelTool(wx.ID_REFRESH, "Aggiorna", refresh_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
+        tb.AddLabelTool(wx.ID_REFRESH, "Aggiorna", refresh_bmp
+                longHelp="Aggiorna la lista delle registrazioni'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=20)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=20)
 
         tb.AddLabelTool(wx.ID_REMOVE, "Rimuovi", remove_bmp,
-                longHelp="Rimuovi dalla lista")
+                longHelp="Rimuovi la registrazione dalla lista")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=30)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=30)
 
         tb.AddLabelTool(wx.ID_SAVEAS, "Scarica", saveas_bmp,
-                longHelp="Scarica il file attraverso il browser")
+                longHelp="Scarica il file della registrazione (browser)")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=40)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=40)
         tb.EnableTool(wx.ID_SAVEAS,False)
