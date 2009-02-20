@@ -32,9 +32,9 @@ class RecorderDialog(wx.Dialog):
         
         titleBox = wx.BoxSizer(wx.HORIZONTAL)
 
-        titleLabel = wx.StaticText(self, -1, "Titolo : ")
-        titleLabel.SetHelpText("Nome del programma che vuoi registrare")
-        gridSizer.Add(titleLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        self.titleLabel = wx.StaticText(self, -1, "Titolo : ")
+        self.titleLabel.SetHelpText("Nome del programma che vuoi registrare")
+        gridSizer.Add(self.titleLabel, 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
         title = wx.TextCtrl(self, -1)
         title.SetHelpText("Nome del programma che vuoi registrare")
@@ -213,38 +213,48 @@ class RecorderDialog(wx.Dialog):
         self.endTimeLabel.SetLabel(to_time)
 
     def OnOk(self, event):
-        t = self.time24.GetValue()
-        from_time = "2009-02-20 " + t
-        d = datetime.strptime(from_time, "%Y-%m-%d %H:%M")
-        delta = timedelta(minutes=self.slider.GetValue())
-        d2 = d + delta
-        to_time = datetime.strftime(d2, "%H:%M")
-        self.endTimeLabel.SetLabel(to_time)
+        if ( (self.title.GetValue() == "") | (self.stationCB.GetValue()=="") | (self.typeCB.GetValue()=="") | (self.formatCB.GetValue()=="") ):
+            dlg = wx.MessageDialog(self, 'Devi riempire tutti i campi',
+                               'Dati insufficienti',
+                               wx.OK | wx.ICON_ERROR
+                               #wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_INFORMATION
+                               )
+            dlg.ShowModal()
+            dlg.Destroy()
+            
+        else:
+            t = self.time24.GetValue()
+            from_time = "2009-02-20 " + t
+            d = datetime.strptime(from_time, "%Y-%m-%d %H:%M")
+            delta = timedelta(minutes=self.slider.GetValue())
+            d2 = d + delta
+            to_time = datetime.strftime(d2, "%H:%M")
+            self.endTimeLabel.SetLabel(to_time)
 
-        from_d = str(self.dpc.GetValue())
-        
-        from_date = datetime.strptime(from_d, "%a %d %b %Y 00:00:00 CET")
-        t = self.time24.GetValue()
-        delta = timedelta(hours=int(t[:2]), minutes=int(t[3:]))
-        from_date = from_date + delta
-        from_time = datetime.strftime(from_date, "%Y-%m-%d %H:%M:00")
+            from_d = str(self.dpc.GetValue())
+            
+            from_date = datetime.strptime(from_d, "%a %d %b %Y 00:00:00 CET")
+            t = self.time24.GetValue()
+            delta = timedelta(hours=int(t[:2]), minutes=int(t[3:]))
+            from_date = from_date + delta
+            from_time = datetime.strftime(from_date, "%Y-%m-%d %H:%M:00")
 
-        adate = datetime(2009,12,20)
-        delta = timedelta(minutes=self.slider.GetValue())
-        adate = adate + delta
-        rec_time = datetime.strftime(adate, "%H:%M")
-        
-        if self.typeCB.GetValue() == STRING_TV:
-            sendType = 'video'
-        elif self.typeCB.GetValue() == STRING_RADIO:
-            sendType = 'audio'
+            adate = datetime(2009,12,20)
+            delta = timedelta(minutes=self.slider.GetValue())
+            adate = adate + delta
+            rec_time = datetime.strftime(adate, "%H:%M")
+            
+            if self.typeCB.GetValue() == STRING_TV:
+                sendType = 'video'
+            elif self.typeCB.GetValue() == STRING_RADIO:
+                sendType = 'audio'
 
-        r = Recording(-1, self.title.GetValue(), self.stationCB.GetValue(),
-                sendType, from_time,
-                rec_time, self.formatCB.GetValue())
-        self.frame.interface.new_recording(r)
-        self.frame.panel.OnRefresh(None)
-        self.Destroy()
+            r = Recording(-1, self.title.GetValue(), self.stationCB.GetValue(),
+                    sendType, from_time,
+                    rec_time, self.formatCB.GetValue())
+            self.frame.interface.new_recording(r)
+            self.frame.panel.OnRefresh(None)
+            self.Destroy()
 
     def GetValues(self):
         result = (self.text1.GetValue() ,self.text2.GetValue() ,self.text3.GetValue())
